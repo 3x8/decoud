@@ -41,12 +41,10 @@ Widget::~Widget() {
 }
 
 
-void Widget::on_ButtonConnect_clicked()
-{
-   // QString searchString = ui->lineEdit->text();
-   //  ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
-
-    connectSerial();
+void Widget::on_ButtonConnect_clicked() {
+  // QString searchString = ui->lineEdit->text();
+  //  ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
+  connectSerial();
 }
 
 
