@@ -18,7 +18,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   ui(new Ui::Widget),
   four_way(new FourWayIF),
   msg_console(new OutConsole),
-  m_serial(new QSerialPort(this)),
+  serial(new QSerialPort(this)),
   input_buffer(new QByteArray),
   eeprom_buffer(new QByteArray) {
   ui->setupUi(this);
@@ -42,17 +42,34 @@ Widget::~Widget() {
 
 
 void Widget::on_ButtonConnect_clicked() {
-  if (m_serial->isOpen()) {
+  if (serial->isOpen()) {
     serialPortClose();
   } else {
     serialPortOpen();
   }
 }
 
+void Widget::serialPortOpen() {
+  serial->setPortName(ui->serialSelectorBox->currentText());
+  serial->setBaudRate(serial->Baud115200);
+  serial->setDataBits(serial->Data8);
+  serial->setParity(serial->NoParity);
+  serial->setStopBits(serial->OneStop);
+  serial->setFlowControl(serial->NoFlowControl);
+
+  if (serial->open(QIODevice::ReadWrite)) {
+    ui->ButtonConnect->setText("Close");
+    ui->ButtonConnect->setStyleSheet("background-color: rgb(255,0,0);");
+    showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
+  } else {
+    //QMessageBox::critical(this, tr("Error"), serial->errorString());
+    showStatusMessage(tr("Open error"));
+  }
+}
 
 void Widget::serialPortClose() {
-  if (m_serial->isOpen()) {
-    m_serial->close();
+  if (serial->isOpen()) {
+    serial->close();
     ui->ButtonConnect->setText("Open");
     ui->ButtonConnect->setStyleSheet("background-color: rgb(0,255,0);");
     showStatusMessage(tr("Disconnected"));
@@ -77,7 +94,7 @@ void Widget::serialInfoStuff() {
 
     for (const QSerialPortInfo &info : infos) {      // here we should add to drop down menu
       ui->serialSelectorBox->addItem(info.portName());
-      //  m_serial->setPortName(info.portName());
+      //  serial->setPortName(info.portName());
       s = s + QObject::tr("Port: ") + info.portName() + "\n"
             + QObject::tr("Location: ") + info.systemLocation() + "\n"
             + QObject::tr("Description: ") + info.description() + "\n"
@@ -89,23 +106,7 @@ void Widget::serialInfoStuff() {
     ui->textEdit->setPlainText(s);
 }
 
-void Widget::serialPortOpen() {
-  m_serial->setPortName(ui->serialSelectorBox->currentText());
-  m_serial->setBaudRate(m_serial->Baud115200);
-  m_serial->setDataBits(m_serial->Data8);
-  m_serial->setParity(m_serial->NoParity);
-  m_serial->setStopBits(m_serial->OneStop);
-  m_serial->setFlowControl(m_serial->NoFlowControl);
 
-  if (m_serial->open(QIODevice::ReadWrite)) {
-    ui->ButtonConnect->setText("Close");
-    ui->ButtonConnect->setStyleSheet("background-color: rgb(255,0,0);");
-    showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6").arg(m_serial->portName()).arg(m_serial->dataBits()).arg(m_serial->baudRate()).arg(m_serial->parity()).arg(m_serial->stopBits()).arg(m_serial->flowControl()));
-  } else {
-    //QMessageBox::critical(this, tr("Error"), m_serial->errorString());
-    showStatusMessage(tr("Open error"));
-  }
-}
 
 void Widget::on_disconnectButton_clicked() {
   serialPortClose();
@@ -113,7 +114,7 @@ void Widget::on_disconnectButton_clicked() {
 
 
 void Widget::readData() {
-  const QByteArray data = m_serial->readAll();
+  const QByteArray data = serial->readAll();
 
   qInfo("size of data : %d ", data.size());
   QByteArray data_hex_string = data.toHex();
@@ -180,7 +181,7 @@ void Widget::readData() {
 }
 
 void Widget::writeData(const QByteArray &data) {
-  m_serial->write(data);
+  serial->write(data);
 }
 
 void Widget::on_sendMessageButton_clicked() {
@@ -462,8 +463,8 @@ void Widget::on_writeBinary_clicked() {
       retries = 0;
       while (four_way->ack_required) {
         writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
-        m_serial->waitForBytesWritten(1000);
-        m_serial->waitForReadyRead(250);
+        serial->waitForBytesWritten(1000);
+        serial->waitForReadyRead(250);
         readData();
         qInfo("what is going on? size :  %d ", ((uint8_t)twofiftysixitems[0]));
 
@@ -520,8 +521,8 @@ void Widget::on_VerifyFlash_clicked()
     four_way->ack_required = true;
     while(four_way->ack_required){
     writeData(four_way->makeFourWayReadCommand(128,  4096+ (i*128)));
-    m_serial->waitForBytesWritten(500);
-    while (m_serial->waitForReadyRead(500)){
+    serial->waitForBytesWritten(500);
+    while (serial->waitForReadyRead(500)){
 
 }
 readData();
@@ -574,14 +575,14 @@ bool Widget::connectMotor(uint8_t motor){
  //   while(four_way->ack_required){
 
     writeData(four_way->makeFourWayCommand(0x37,motor));
-    m_serial->waitForBytesWritten(500);
-    while (m_serial->waitForReadyRead(500)){
+    serial->waitForBytesWritten(500);
+    while (serial->waitForReadyRead(500)){
 
 }
 readData();
 
 
-while (m_serial->waitForReadyRead(50)){
+while (serial->waitForReadyRead(50)){
 
 }
 
@@ -605,8 +606,8 @@ while (m_serial->waitForReadyRead(50)){
    while(four_way->ack_required){
 
        writeData(four_way->makeFourWayReadCommand(buffer_length,0x7c00));
-        m_serial->waitForBytesWritten(500);
-        while (m_serial->waitForReadyRead(500)){
+        serial->waitForBytesWritten(500);
+        while (serial->waitForReadyRead(500)){
 
     }
 
@@ -742,8 +743,8 @@ void Widget::on_writeEEPROM_clicked()
     eeprom_out[21] = (char)ui->varPWMCheckBox->isChecked();
   writeData(four_way->makeFourWayWriteCommand(eeprom_out, 48, 0x7c00)) ;
 
-  m_serial->waitForBytesWritten(500);
-  while (m_serial->waitForReadyRead(500)){
+  serial->waitForBytesWritten(500);
+  while (serial->waitForReadyRead(500)){
 
 }
 
@@ -791,8 +792,8 @@ void Widget::sendFirstEeprom(){
     }
     four_way->ack_required = true;
     writeData(four_way->makeFourWayWriteCommand(eeprom_out, 48, 0x7c00)) ;
-    m_serial->waitForBytesWritten(500);
-    while (m_serial->waitForReadyRead(500)){
+    serial->waitForBytesWritten(500);
+    while (serial->waitForReadyRead(500)){
 
   }
 

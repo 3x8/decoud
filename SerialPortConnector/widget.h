@@ -92,7 +92,7 @@ class Widget : public QWidget {
   private:
     FourWayIF *four_way = nullptr;
     OutConsole *msg_console = nullptr;
-    QSerialPort *m_serial = nullptr;
+    QSerialPort *serial = nullptr;
     QLabel *statuslabel = nullptr;
     QByteArray *input_buffer = nullptr;
     QString filename;
