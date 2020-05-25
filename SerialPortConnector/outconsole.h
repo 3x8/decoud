@@ -1,26 +1,14 @@
-#ifndef OUTCONSOLE_H
-#define OUTCONSOLE_H
+#pragma once
 
 #include <QPlainTextEdit>
 
+class OutConsole: public QPlainTextEdit {
+  Q_OBJECT
 
-class OutConsole: public QPlainTextEdit
-
-{
-    Q_OBJECT
-
-
-signals:
+  signals:
     void getData(const QByteArray &data);
 
-public:
-
+  public:
     explicit OutConsole(QWidget *parent = nullptr);
     void putData(const QByteArray &data);
-
-
-
-
 };
-
-#endif // OUTCONSOLE_H
