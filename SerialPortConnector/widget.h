@@ -24,7 +24,7 @@ class Widget : public QWidget {
     uint8_t mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len);
     void send_mspCommand(uint8_t cmd, QByteArray payload);
 
-    void on_sendButton_clicked();
+    void on_ButtonConnect_clicked();
     void on_disconnectButton_clicked();
     void on_pushButton_clicked();
     void on_sendMessageButton_clicked();

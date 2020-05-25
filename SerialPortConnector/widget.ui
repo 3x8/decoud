@@ -213,7 +213,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="sendButton">
+      <widget class="QPushButton" name="ButtonConnect">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -842,7 +842,7 @@
       <zorder>label_2</zorder>
       <zorder>label</zorder>
       <zorder>lineEdit</zorder>
-      <zorder>sendButton</zorder>
+      <zorder>ButtonConnect</zorder>
       <zorder>StatusLabel</zorder>
       <zorder>disconnectButton</zorder>
       <zorder>devSettings</zorder>
