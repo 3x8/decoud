@@ -50,42 +50,23 @@ void Widget::on_ButtonConnect_clicked()
 }
 
 
-void Widget::closeSerialPort()
-{
-    if (m_serial->isOpen())
-        m_serial->close();
-    showStatusMessage(tr("Disconnected"));
-}
-//void Widget::loadTextFile()
-//{
-//    QFile inputFile(":/input.txt");
-//    inputFile.open(QIODevice::ReadOnly);
-
-//    QTextStream in(&inputFile);
-//    QString line = in.readAll();
-//    inputFile.close();
-
-//    ui->textEdit->setPlainText(line);
-//    QTextCursor cursor = ui->textEdit->textCursor();
-//    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
-//}
-
-
-void Widget::loadBinFile()
-{
-   filename = QFileDialog::getOpenFileName(this,
-    tr("Open File"), "c:", tr("All Files (*.*)"));
-ui->textEdit->setPlainText(filename);
-ui->writeBinary->setHidden(false);
-ui->VerifyFlash->setHidden(false);
-
+void Widget::closeSerialPort() {
+  if (m_serial->isOpen()) {
+    m_serial->close();
+  }
+  showStatusMessage(tr("Disconnected"));
 }
 
+void Widget::loadBinFile() {
+  filename = QFileDialog::getOpenFileName(this,
+  tr("Open File"), "c:", tr("All Files (*.*)"));
+  ui->textEdit->setPlainText(filename);
+  ui->writeBinary->setHidden(false);
+  ui->VerifyFlash->setHidden(false);
+}
 
-
-void Widget::showStatusMessage(const QString &message)
-{
-    ui->label_2->setText(message);
+void Widget::showStatusMessage(const QString &message) {
+  ui->label_2->setText(message);
 }
 
 void Widget::serialInfoStuff() {
@@ -106,7 +87,7 @@ void Widget::serialInfoStuff() {
     ui->textEdit->setPlainText(s);
 }
 
-void Widget::connectSerial()  {
+void Widget::connectSerial() {
   m_serial->setPortName(ui->serialSelectorBox->currentText());
   m_serial->setBaudRate(m_serial->Baud115200);
   m_serial->setDataBits(m_serial->Data8);
@@ -120,7 +101,6 @@ void Widget::connectSerial()  {
     QMessageBox::critical(this, tr("Error"), m_serial->errorString());
     showStatusMessage(tr("Open error"));
   }
-
 }
 
 void Widget::on_disconnectButton_clicked() {
@@ -195,131 +175,39 @@ void Widget::readData() {
     }
 }
 
-//void Widget::readData()
-//{
-//    const QByteArray data = m_serial->readAll();
-
-
-
-//    qInfo("size of data : %d ", data.size());
-//    QByteArray data_hex_string = data.toHex();
-//    if(ui->checkBox_2->isChecked()){
-
-//      ui->plainTextEdit_2->insertPlainText(data_hex_string);           // adds data to end of old text
-//      ui->plainTextEdit_2->insertPlainText("\n");
-//}else{
-//      ui->plainTextEdit_2->appendPlainText(data);
-//   }
-
-//    if(four_way->passthrough_started){
-
-//      if(four_way->ack_required == true){
-//      if(four_way->checkCRC(data,data.size())){
-
-//         if(data[data.size()-3] == (char) 0x00){     // ACK OK!!
-//             four_way->ack_required = false;
-//             four_way->ack_type = ACK_OK;
-
-//             ui->StatusLabel->setText("GOOD ACK FROM IF");
-//             if(data[1] == (char) 0x3a){
-//                 //  if verifying flash
-//                  hideEEPROMSettings(false);
-//                  input_buffer->clear();
-//                  for(int i = 0; i < (uint8_t)data[4]; i ++){
-//                  input_buffer->append(data[i+5]); // first 4 byte are package header
-
-//                  }
-//                 qInfo("GOOD ACK FROM ESC -- read");
-//             }
-//             if(data[1] == (char) 0x37){
-//                 hideESCSettings(false);
-//                 ui->escStatusLabel->setText("Connected");
-//                 four_way->ESC_connected = true;
-//             }
-//         }else{            // bad ack
-//             if(data[1] == (char) 0x37){
-//                 hideESCSettings(true);
-//                 four_way->ESC_connected = false;
-//             }
-//             hideEEPROMSettings(true);
-//             qInfo("BAD OR NO ACK FROM ESC");
-//             ui->StatusLabel->setText("BAD OR NO ACK FROM IF");
-//             four_way->ack_type = BAD_ACK;
-//            // four_way->ack_required = false;
-//         }
-//      }else{
-//         qInfo("4WAY CRC ERROR");
-//         ui->StatusLabel->setText("BAD OR NO ACK FROM ESC");
-//         four_way->ack_type = CRC_ERROR;
-//      }
-//      }else{
-//         qInfo("no ack required");
-//      }
-//    }
-
-//    if(parseMSPMessage){
-////        data[]         // 24
-////        data[]         // 4d
-////        data[]         // 3c
-////        data[]         // length  one byte
-////        data[]         // command one byte
-////        data[]         // payload x length bytes
-////        data[]         // crc
-
-
-//    }
-
-//}
-
-
-
-void Widget::writeData(const QByteArray &data)
-{
-    m_serial->write(data);
-
+void Widget::writeData(const QByteArray &data) {
+  m_serial->write(data);
 }
 
-
-
-void Widget::on_sendMessageButton_clicked()
-{
+void Widget::on_sendMessageButton_clicked() {
   msg_console->setEnabled(true);
- const QByteArray data = ui->plainTextEdit->toPlainText().toLocal8Bit();
-writeData(data);
-
+  const QByteArray data = ui->plainTextEdit->toPlainText().toLocal8Bit();
+  writeData(data);
 }
 
-
-uint8_t Widget::mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len)
-{
-    while (len-- > 0) {
-        checksum ^= *data++;
-    }
-    return checksum;
+uint8_t Widget::mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len) {
+  while (len-- > 0) {
+    checksum ^= *data++;
+  }
+  return (checksum);
 }
 
-
-
-void Widget::on_pushButton_clicked()
-{
-
-four_way->ack_required = true;
-writeData(four_way->makeFourWayCommand(0x3f,0x04));
+void Widget::on_pushButton_clicked() {
+  four_way->ack_required = true;
+  writeData(four_way->makeFourWayCommand(0x3f,0x04));
 }
 
-void Widget::on_pushButton_2_clicked()
-{
- four_way->ack_required = true;
-writeData(four_way->makeFourWayCommand(0x37,0x00));
+void Widget::on_pushButton_2_clicked() {
+  four_way->ack_required = true;
+  writeData(four_way->makeFourWayCommand(0x37,0x00));
 }
 
-void Widget::on_passthoughButton_clicked()
-{
-   hide4wayButtons(false);
-   QByteArray passthroughenable2;    // payload  empty here
-   four_way->passthrough_started = true;
-   parseMSPMessage = false;
-    send_mspCommand(0xf5,passthroughenable2);
+void Widget::on_passthoughButton_clicked() {
+  hide4wayButtons(false);
+  QByteArray passthroughenable2;    // payload  empty here
+  four_way->passthrough_started = true;
+  parseMSPMessage = false;
+  send_mspCommand(0xf5,passthroughenable2);
 }
 
 void Widget::on_horizontalSlider_sliderMoved(int position)
