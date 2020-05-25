@@ -50,14 +50,14 @@ class Widget : public QWidget {
     Ui::Widget *ui;
     void loadBinFile();
     void serialInfoStuff();
-    void connectSerial();
+    void serialPortOpen();
     void hide4wayButtons(bool b);
     void hideESCSettings(bool b);
     void hideEEPROMSettings(bool b);
     void allup();
     bool connectMotor(uint8_t motor);
     void sendFirstEeprom();
-    void closeSerialPort();
+    void serialPortClose();
     void readData();
     void putData(const QByteArray &data);
     void verifyFlash();

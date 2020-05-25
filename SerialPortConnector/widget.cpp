@@ -42,17 +42,21 @@ Widget::~Widget() {
 
 
 void Widget::on_ButtonConnect_clicked() {
-  // QString searchString = ui->lineEdit->text();
-  //  ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
-  connectSerial();
+  if (m_serial->isOpen()) {
+    serialPortClose();
+  } else {
+    serialPortOpen();
+  }
 }
 
 
-void Widget::closeSerialPort() {
+void Widget::serialPortClose() {
   if (m_serial->isOpen()) {
     m_serial->close();
+    ui->ButtonConnect->setText("Open");
+    ui->ButtonConnect->setStyleSheet("background-color: rgb(0,255,0);");
+    showStatusMessage(tr("Disconnected"));
   }
-  showStatusMessage(tr("Disconnected"));
 }
 
 void Widget::loadBinFile() {
@@ -85,7 +89,7 @@ void Widget::serialInfoStuff() {
     ui->textEdit->setPlainText(s);
 }
 
-void Widget::connectSerial() {
+void Widget::serialPortOpen() {
   m_serial->setPortName(ui->serialSelectorBox->currentText());
   m_serial->setBaudRate(m_serial->Baud115200);
   m_serial->setDataBits(m_serial->Data8);
@@ -94,15 +98,17 @@ void Widget::connectSerial() {
   m_serial->setFlowControl(m_serial->NoFlowControl);
 
   if (m_serial->open(QIODevice::ReadWrite)) {
+    ui->ButtonConnect->setText("Close");
+    ui->ButtonConnect->setStyleSheet("background-color: rgb(255,0,0);");
     showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6").arg(m_serial->portName()).arg(m_serial->dataBits()).arg(m_serial->baudRate()).arg(m_serial->parity()).arg(m_serial->stopBits()).arg(m_serial->flowControl()));
   } else {
-    QMessageBox::critical(this, tr("Error"), m_serial->errorString());
+    //QMessageBox::critical(this, tr("Error"), m_serial->errorString());
     showStatusMessage(tr("Open error"));
   }
 }
 
 void Widget::on_disconnectButton_clicked() {
-  closeSerialPort();
+  serialPortClose();
 }
 
 

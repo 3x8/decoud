@@ -223,7 +223,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Connect</string>
+        <string>Open</string>
        </property>
       </widget>
       <widget class="QLabel" name="StatusLabel">
