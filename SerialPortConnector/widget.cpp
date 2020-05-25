@@ -14,38 +14,30 @@
 #include <QTimer>
 #include <QFileDialog>
 
-Widget::Widget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Widget),
-    four_way(new FourWayIF),
-    msg_console(new OutConsole),
-    m_serial(new QSerialPort(this)),
-    input_buffer(new QByteArray),
-    eeprom_buffer(new QByteArray)
-{
-    ui->setupUi(this);
+Widget::Widget(QWidget *parent): QWidget(parent),
+  ui(new Ui::Widget),
+  four_way(new FourWayIF),
+  msg_console(new OutConsole),
+  m_serial(new QSerialPort(this)),
+  input_buffer(new QByteArray),
+  eeprom_buffer(new QByteArray) {
+  ui->setupUi(this);
+
     this->setWindowTitle("Multi ESC Config Tool 0.1");
-
     serialInfoStuff();
-
-
-  //  connect(m_serial, &QSerialPort::readyRead, this, &Widget::readData);  // an interrupt for reading serial
-
     connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
-  //  myButton->seCheckable(true);
+    hide4wayButtons(true);
+    hideESCSettings(true);
+    hideEEPROMSettings(true);
 
-  hide4wayButtons(true);
-  hideESCSettings(true);
-  hideEEPROMSettings(true);
-  ui->writeBinary->setHidden(true);
-  ui->VerifyFlash->setHidden(true);
-  ui->devFrame->setHidden(true);
+    ui->writeBinary->setHidden(true);
+    ui->VerifyFlash->setHidden(true);
+    ui->devFrame->setHidden(true);
 }
 
-Widget::~Widget()
-{
-    delete ui;
+Widget::~Widget() {
+  delete ui;
 }
 
 
@@ -522,117 +514,91 @@ if (ui->FourWayComboBox->currentText() == "Set_interface(Arm)_3F"){            /
 }
 }
 
-void Widget::send_mspCommand(uint8_t cmd, QByteArray payload){
-    QByteArray mspMsgOut;
-    mspMsgOut.append((char) 0x24);
-    mspMsgOut.append((char) 0x4d);
-    mspMsgOut.append((char) 0x3c);
-    mspMsgOut.append((char) payload.length());
-    mspMsgOut.append((char) cmd);
-    if(payload.length() > 0){
+void Widget::send_mspCommand(uint8_t cmd, QByteArray payload) {
+  QByteArray mspMsgOut;
+  mspMsgOut.append((char) 0x24);
+  mspMsgOut.append((char) 0x4d);
+  mspMsgOut.append((char) 0x3c);
+  mspMsgOut.append((char) payload.length());
+  mspMsgOut.append((char) cmd);
+  if(payload.length() > 0){
     mspMsgOut.append(payload);
-    }
+  }
 
-    uint8_t checksum = 0;
-    for(int i = 3; i < mspMsgOut.length(); i++){
-        checksum ^= mspMsgOut[i];
-    }
-    mspMsgOut.append((char) checksum);
-    writeData(mspMsgOut);
-
-
-
-
-
+  uint8_t checksum = 0;
+  for(int i = 3; i < mspMsgOut.length(); i++){
+    checksum ^= mspMsgOut[i];
+  }
+  mspMsgOut.append((char) checksum);
+  writeData(mspMsgOut);
 }
 
-
-
-
-void Widget::on_loadBinary_clicked()
-{
-    loadBinFile();
+void Widget::on_loadBinary_clicked() {
+  loadBinFile();
 }
 
-void Widget::on_writeBinary_clicked()
-{
-       QFile inputFile(filename);
-        inputFile.open(QIODevice::ReadOnly);
+void Widget::on_writeBinary_clicked() {
+  QFile inputFile(filename);
+  inputFile.open(QIODevice::ReadOnly);
+  QByteArray line = inputFile.readAll();
+  QByteArray data_hex_string = line.toHex();
 
-      //  QTextStream in(&inputFile);
-        QByteArray line = inputFile.readAll();
-    //  QByteArray output_bin_data = line.toLocal8Bit();
-    QByteArray data_hex_string = line.toHex();
+  inputFile.close();
+  ui->plainTextEdit_2->setPlainText(line);
+  ui->textEdit->setPlainText(data_hex_string);
 
+  uint32_t sizeofBin = line.size();
+  uint16_t index = 0;
+  ui->progressBar->setValue(0);
+  uint8_t pages = sizeofBin / 1024;
+  uint8_t max_retries = 8;
+  uint8_t retries = 0;
 
-        inputFile.close();
+  for (int i = 0; i <= pages; i++){   // for each page ( including partial page at end)
+    for(int j = 0; j < 4; j++){      // 4 buffers per page
+      QByteArray twofiftysixitems;
+      // for debugging limit to 50
+      for (int k = 0; k < 256; k++) {       // transfer 256 bytes each buffer
+        twofiftysixitems.append(line.at(k+ (i*1024) + (j*256)));
+        index++;
+        if(index >= sizeofBin){
+          break;
+        }
+      }
 
-        ui->plainTextEdit_2->setPlainText(line);
+      four_way->ack_required = true;
+      retries = 0;
+      while (four_way->ack_required) {
+        writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
+        m_serial->waitForBytesWritten(1000);
+        m_serial->waitForReadyRead(250);
+        readData();
+        qInfo("what is going on? size :  %d ", ((uint8_t)twofiftysixitems[0]));
 
-        ui->textEdit->setPlainText(data_hex_string);
-       // QTextCursor cursor = ui->textEdit->textCursor();
-      //  cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
+        retries++;
+        if (retries > max_retries) {        // after 8 tries to get an ack
+          break;
+        }
+      }
 
-        uint32_t sizeofBin = line.size();
-        uint16_t index = 0;
-        ui->progressBar->setValue(0);
-        uint8_t pages = sizeofBin / 1024;
-    //    uint8_t bytes_in_last_page = sizeofBin % 1024;
-        uint8_t max_retries = 8;
-        uint8_t retries = 0;
+      if (four_way->ack_type == BAD_ACK) {
+        return;
+      }
 
-        for(int i = 0; i <= pages; i++){   // for each page ( including partial page at end)
+      if (four_way->ack_type == CRC_ERROR) {
+        i--;// go back to beggining of page to erase in case data has been written.
+        index = (index - 256 * j);
+        break;
+      }
 
-            for(int j = 0; j < 4; j++){      // 4 buffers per page
-            QByteArray twofiftysixitems;
-                 // for debugging limit to 50
-                   for (int k = 0; k < 256; k++){       // transfer 256 bytes each buffer
-                   twofiftysixitems.append(line.at(k+ (i*1024) + (j*256)));
-                   index++;
-                   if(index >= sizeofBin){
-                       break;
-
-
-                   }
-                    }
-                   four_way->ack_required = true;
-                  // four_way->ack_received = false;
-                   retries = 0;
-                   while(four_way->ack_required){
-                         writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
-                         m_serial->waitForBytesWritten(1000);
-                      //   while(m_serial->waitForReadyRead(250)){
-                      m_serial->waitForReadyRead(250);
-                         readData();
-                         qInfo("what is going on? size :  %d ", ((uint8_t)twofiftysixitems[0]));
-                     //    four_way->ack_required = false; // for debugging!!!
-                      //   four_way->ack_type = ACK_OK;      // for debugging
-                     //   }
-                         retries++;
-                         if(retries>max_retries){        // after 8 tries to get an ack
-                             break;
-                         }
-
-
-                   }
-                   if(four_way->ack_type == BAD_ACK){
-                      return; // give up after 8 attempts at the same block
-                   }
-                   if(four_way->ack_type == CRC_ERROR){
-                       i--;// go back to beggining of page to erase in case data has been written.
-                   index = index-256*j;
-                   break;
-                   }
-                   ui->progressBar->setValue((index*100)/sizeofBin);
-                   QApplication::processEvents();
-                   if(index >= sizeofBin){
-                       break;
-                   }
-
-
-            }
-       }
-       qInfo("what is going on? size :  %d ", sizeofBin );
+      ui->progressBar->setValue((index*100) / sizeofBin);
+      QApplication::processEvents();
+      if(index >= sizeofBin){
+        break;
+      }
+    }
+  }
+  qInfo("what is going on? size :  %d ", sizeofBin );
 }
 
 
