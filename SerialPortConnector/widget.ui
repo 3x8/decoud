@@ -357,7 +357,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Load Binary</string>
+          <string>load binary</string>
          </property>
         </widget>
         <widget class="QPushButton" name="VerifyFlash">
