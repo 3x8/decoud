@@ -108,11 +108,6 @@ void Widget::serialInfoStuff() {
 
 
 
-void Widget::on_disconnectButton_clicked() {
-  serialPortClose();
-}
-
-
 void Widget::readData() {
   const QByteArray data = serial->readAll();
 

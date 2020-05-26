@@ -25,7 +25,6 @@ class Widget : public QWidget {
     void send_mspCommand(uint8_t cmd, QByteArray payload);
 
     void on_ButtonConnect_clicked();
-    void on_disconnectButton_clicked();
     void on_pushButton_clicked();
     void on_sendMessageButton_clicked();
     void on_passthoughButton_clicked();

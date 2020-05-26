@@ -125,7 +125,7 @@
         <rect>
          <x>250</x>
          <y>330</y>
-         <width>121</width>
+         <width>111</width>
          <height>41</height>
         </rect>
        </property>
@@ -239,19 +239,6 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Status:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="disconnectButton">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>10</y>
-         <width>101</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Close Connection</string>
-       </property>
-      </widget>
       <widget class="QFrame" name="fourWayFrame">
        <property name="geometry">
         <rect>
@@ -357,7 +344,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Write Binary 3b</string>
+          <string>Flash</string>
          </property>
         </widget>
         <widget class="QPushButton" name="loadBinary">
@@ -606,7 +593,7 @@
         <widget class="QPushButton" name="sendFirstEEPROM">
          <property name="geometry">
           <rect>
-           <x>260</x>
+           <x>250</x>
            <y>20</y>
            <width>131</width>
            <height>23</height>
@@ -640,7 +627,7 @@
           <rect>
            <x>10</x>
            <y>260</y>
-           <width>391</width>
+           <width>361</width>
            <height>23</height>
           </rect>
          </property>
@@ -654,7 +641,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>180</y>
+         <y>170</y>
          <width>121</width>
          <height>17</height>
         </rect>
@@ -844,7 +831,6 @@
       <zorder>lineEdit</zorder>
       <zorder>ButtonConnect</zorder>
       <zorder>StatusLabel</zorder>
-      <zorder>disconnectButton</zorder>
       <zorder>devSettings</zorder>
       <zorder>devFrame</zorder>
       <zorder>endPassthrough</zorder>
