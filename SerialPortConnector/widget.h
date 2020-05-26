@@ -43,9 +43,12 @@ class Widget : public QWidget {
     void on_writeEEPROM_clicked();
     void on_sendFirstEEPROM_clicked();
     void on_devSettings_stateChanged(int arg1);
-    void on_endPassthrough_clicked();
 
   private:
+    bool parseMSPMessage = true;
+    uint8_t retries = 0;
+    uint8_t max_retries = 16;
+
     Ui::Widget *ui;
     void loadBinFile();
     void serialInfoStuff();
@@ -72,21 +75,7 @@ class Widget : public QWidget {
         ACK_OK,
         BAD_ACK,
         CRC_ERROR
-
     };
-
-   bool parseMSPMessage = true;
-   bool more_to_come = false;
-
-   uint8_t retries = 0;
-   uint8_t max_retries = 16;
-
-//    typedef struct ioMem_s {
-//        uint8_t D_NUM_BYTES;
-//        uint8_t D_FLASH_ADDR_H;
-//        uint8_t D_FLASH_ADDR_L;
-//        uint8_t *D_PTR_I;
-//    } ioMem_t;
 
   private:
     FourWayIF *four_way = nullptr;
@@ -96,8 +85,4 @@ class Widget : public QWidget {
     QByteArray *input_buffer = nullptr;
     QString filename;
     QByteArray *eeprom_buffer = nullptr;
-
-    //  uint8_t output_bin_data[255] = {0};
-    //  QComboBox *m_box = nullptr;
-    //  InConsole *rsp_console = nullptr;
 };

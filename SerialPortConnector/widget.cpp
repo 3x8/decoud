@@ -49,6 +49,28 @@ void Widget::on_ButtonConnect_clicked() {
   }
 }
 
+void Widget::on_passthoughButton_clicked() {
+  if (four_way->passthrough_started == false) {
+    hide4wayButtons(false);
+    QByteArray passthroughenable2;    // payload  empty here
+    four_way->passthrough_started = true;
+    parseMSPMessage = false;
+    send_mspCommand(0xf5,passthroughenable2);
+    ui->passthoughButton->setText("Passthrough Stop");
+  } else {
+    hide4wayButtons(true);
+    hideESCSettings(true);
+    hideEEPROMSettings(true);
+    writeData(four_way->makeFourWayCommand(0x34,0x00));
+    parseMSPMessage = true;
+    four_way->passthrough_started = false;
+    ui->passthoughButton->setText("Passthrough Start");
+  }
+
+
+
+}
+
 void Widget::serialPortOpen() {
   serial->setPortName(ui->serialSelectorBox->currentText());
   serial->setBaudRate(serial->Baud115200);
@@ -58,27 +80,27 @@ void Widget::serialPortOpen() {
   serial->setFlowControl(serial->NoFlowControl);
 
   if (serial->open(QIODevice::ReadWrite)) {
-    ui->ButtonConnect->setText("Close");
+    ui->ButtonConnect->setText("close");
     ui->ButtonConnect->setStyleSheet("background-color: rgb(255,0,0);");
-    showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
+    showStatusMessage(tr("connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
   } else {
     //QMessageBox::critical(this, tr("Error"), serial->errorString());
-    showStatusMessage(tr("Open error"));
+    showStatusMessage(tr("open error"));
   }
 }
 
 void Widget::serialPortClose() {
   if (serial->isOpen()) {
     serial->close();
-    ui->ButtonConnect->setText("Open");
+    ui->ButtonConnect->setText("open");
     ui->ButtonConnect->setStyleSheet("background-color: rgb(0,255,0);");
-    showStatusMessage(tr("Disconnected"));
+    showStatusMessage(tr("disconnected"));
   }
 }
 
 void Widget::loadBinFile() {
   filename = QFileDialog::getOpenFileName(this,
-  tr("Open File"), "c:", tr("All Files (*.*)"));
+  tr("open file"), "c:", tr("all files (*.*)"));
   ui->textEdit->setPlainText(filename);
   ui->writeBinary->setHidden(false);
   ui->VerifyFlash->setHidden(false);
@@ -95,13 +117,13 @@ void Widget::serialInfoStuff() {
     for (const QSerialPortInfo &info : infos) {      // here we should add to drop down menu
       ui->serialSelectorBox->addItem(info.portName());
       //  serial->setPortName(info.portName());
-      s = s + QObject::tr("Port: ") + info.portName() + "\n"
-            + QObject::tr("Location: ") + info.systemLocation() + "\n"
-            + QObject::tr("Description: ") + info.description() + "\n"
-            + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
-            + QObject::tr("Serial number: ") + info.serialNumber() + "\n"
-            + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
-            + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n";
+      s = s + QObject::tr("port: ") + info.portName() + "\n"
+            + QObject::tr("location: ") + info.systemLocation() + "\n"
+            + QObject::tr("description: ") + info.description() + "\n"
+            + QObject::tr("manufacturer: ") + info.manufacturer() + "\n"
+            + QObject::tr("serialNumber: ") + info.serialNumber() + "\n"
+            + QObject::tr("vendorIdentifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
+            + QObject::tr("productIdentifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n";
     }
     ui->textEdit->setPlainText(s);
 }
@@ -126,14 +148,14 @@ void Widget::readData() {
         if (data[data.size() - 3] == (char) 0x00) {     // ACK OK!!
           four_way->ack_required = false;
           four_way->ack_type = ACK_OK;
-          ui->StatusLabel->setText("GOOD ACK FROM ESC");
+          ui->StatusLabel->setText("esc->ACK_OK");
           if (data[1] == (char) 0x3a) {
             // if verifying flash
             input_buffer->clear();
             for(int i = 0; i < (uint8_t)data[4]; i ++){
               input_buffer->append(data[i+5]); // first 4 byte are package header
             }
-            qInfo("GOOD ACK FROM ESC -- read");
+            qInfo("esc->ACK_OK");
             hideESCSettings(false);
             hideEEPROMSettings(false);
             // QApplication::processEvents();
@@ -202,13 +224,7 @@ void Widget::on_pushButton_2_clicked() {
   writeData(four_way->makeFourWayCommand(0x37,0x00));
 }
 
-void Widget::on_passthoughButton_clicked() {
-  hide4wayButtons(false);
-  QByteArray passthroughenable2;    // payload  empty here
-  four_way->passthrough_started = true;
-  parseMSPMessage = false;
-  send_mspCommand(0xf5,passthroughenable2);
-}
+
 
 void Widget::on_horizontalSlider_sliderMoved(int position)
 {
@@ -812,14 +828,4 @@ ui->devFrame->setHidden(true);
  }else{
   ui->devFrame->setHidden(false);
  }
-}
-
-void Widget::on_endPassthrough_clicked()
-{
-    hide4wayButtons(true);
-    hideESCSettings(true);
-    hideEEPROMSettings(true);
-    writeData(four_way->makeFourWayCommand(0x34,0x00));
-    parseMSPMessage = true;
-    four_way->passthrough_started = false;
 }

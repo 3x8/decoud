@@ -87,14 +87,14 @@
       <widget class="QPushButton" name="passthoughButton">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>270</x>
          <y>10</y>
          <width>121</width>
          <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>Start Passthrough</string>
+        <string>Passthrough Start</string>
        </property>
       </widget>
       <widget class="QPlainTextEdit" name="plainTextEdit_2">
@@ -223,7 +223,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Open</string>
+        <string>open</string>
        </property>
       </widget>
       <widget class="QLabel" name="StatusLabel">
@@ -337,14 +337,14 @@
         <widget class="QPushButton" name="writeBinary">
          <property name="geometry">
           <rect>
-           <x>130</x>
+           <x>160</x>
            <y>300</y>
            <width>101</width>
            <height>23</height>
           </rect>
          </property>
          <property name="text">
-          <string>Flash</string>
+          <string>flash write</string>
          </property>
         </widget>
         <widget class="QPushButton" name="loadBinary">
@@ -363,14 +363,14 @@
         <widget class="QPushButton" name="VerifyFlash">
          <property name="geometry">
           <rect>
-           <x>300</x>
+           <x>280</x>
            <y>300</y>
-           <width>75</width>
+           <width>101</width>
            <height>23</height>
           </rect>
          </property>
          <property name="text">
-          <string>Verify Flash</string>
+          <string>flash verify</string>
          </property>
         </widget>
         <widget class="QFrame" name="eepromFrame">
@@ -435,7 +435,7 @@
            <rect>
             <x>10</x>
             <y>170</y>
-            <width>121</width>
+            <width>151</width>
             <height>31</height>
            </rect>
           </property>
@@ -627,7 +627,7 @@
           <rect>
            <x>10</x>
            <y>260</y>
-           <width>361</width>
+           <width>371</width>
            <height>23</height>
           </rect>
          </property>
@@ -802,19 +802,6 @@
         </property>
        </widget>
       </widget>
-      <widget class="QPushButton" name="endPassthrough">
-       <property name="geometry">
-        <rect>
-         <x>660</x>
-         <y>10</y>
-         <width>121</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Stop Passthrough</string>
-       </property>
-      </widget>
       <zorder>fourWayFrame</zorder>
       <zorder>horizontalSlider</zorder>
       <zorder>plainTextEdit</zorder>
@@ -833,7 +820,6 @@
       <zorder>StatusLabel</zorder>
       <zorder>devSettings</zorder>
       <zorder>devFrame</zorder>
-      <zorder>endPassthrough</zorder>
      </widget>
     </item>
    </layout>

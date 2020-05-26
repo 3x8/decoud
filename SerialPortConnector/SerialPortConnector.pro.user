@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.12.1, 2020-05-25T18:38:13. -->
+<!-- Written by QtCreator 4.12.1, 2020-05-26T12:55:00. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -306,8 +306,9 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/max/Documents/git/SerialPortConnector/SerialPortConnector.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/max/Documents/git/SerialPortConnector/SerialPortConnector.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">SerialPortConnector2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/max/Documents/git/conutheadUpload/SerialPortConnector/SerialPortConnector.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/max/Documents/git/conutheadUpload/SerialPortConnector/SerialPortConnector.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
