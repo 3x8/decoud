@@ -84,7 +84,7 @@
         <string>MSP Motor Control</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="passthoughButton">
+      <widget class="QPushButton" name="buttonPassthough">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -120,7 +120,7 @@
         <string>Console</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="sendMessageButton">
+      <widget class="QPushButton" name="buttonSendMessage">
        <property name="geometry">
         <rect>
          <x>250</x>
@@ -213,7 +213,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="ButtonConnect">
+      <widget class="QPushButton" name="buttonConnect">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -229,7 +229,7 @@
       <widget class="QLabel" name="StatusLabel">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>370</x>
          <y>40</y>
          <width>181</width>
          <height>16</height>
@@ -788,7 +788,7 @@
          <string>InitDevice(37)</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="buttonSetIfARM">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -806,17 +806,17 @@
       <zorder>horizontalSlider</zorder>
       <zorder>plainTextEdit</zorder>
       <zorder>checkBox</zorder>
-      <zorder>passthoughButton</zorder>
+      <zorder>buttonPassthough</zorder>
       <zorder>plainTextEdit_2</zorder>
       <zorder>label_3</zorder>
-      <zorder>sendMessageButton</zorder>
+      <zorder>buttonSendMessage</zorder>
       <zorder>serialSelectorBox</zorder>
       <zorder>checkBox_2</zorder>
       <zorder>textEdit</zorder>
       <zorder>label_2</zorder>
       <zorder>label</zorder>
       <zorder>lineEdit</zorder>
-      <zorder>ButtonConnect</zorder>
+      <zorder>buttonConnect</zorder>
       <zorder>StatusLabel</zorder>
       <zorder>devSettings</zorder>
       <zorder>devFrame</zorder>

@@ -6,7 +6,6 @@ class FourWayIF {
   public:
     bool checkCRC(const QByteArray data , uint16_t buffer_length);
     bool ACK_required();
-    //bool ACK_received();
     void set_Ack_req(char ackreq);
     bool ack_required;
     bool ack_received;

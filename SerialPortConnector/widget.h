@@ -24,10 +24,10 @@ class Widget : public QWidget {
     uint8_t mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len);
     void send_mspCommand(uint8_t cmd, QByteArray payload);
 
-    void on_ButtonConnect_clicked();
-    void on_pushButton_clicked();
-    void on_sendMessageButton_clicked();
-    void on_passthoughButton_clicked();
+    void on_buttonConnect_clicked();
+    void on_buttonSetIfARM_clicked();
+    void on_buttonSendMessage_clicked();
+    void on_buttonPassthough_clicked();
     void on_horizontalSlider_sliderMoved(int position);
     void on_serialSelectorBox_currentTextChanged(const QString &arg1);
     void on_fourWaySendButton_clicked();
@@ -51,7 +51,7 @@ class Widget : public QWidget {
 
     Ui::Widget *ui;
     void loadBinFile();
-    void serialInfoStuff();
+    void serialInfo();
     void serialPortOpen();
     void hide4wayButtons(bool b);
     void hideESCSettings(bool b);
@@ -73,8 +73,8 @@ class Widget : public QWidget {
 
     enum messages{
         ACK_OK,
-        BAD_ACK,
-        CRC_ERROR
+        ACK_KO,
+        ACK_CRC
     };
 
   private:

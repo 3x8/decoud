@@ -162,8 +162,3 @@ bool FourWayIF::ACK_required(){
 void FourWayIF::set_Ack_req(char ackreq){
     ack_req = ackreq;
 }
-
-/*
-bool FourWayIF::ACK_received(){
-
-}*/

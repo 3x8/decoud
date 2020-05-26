@@ -21,10 +21,10 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   serial(new QSerialPort(this)),
   input_buffer(new QByteArray),
   eeprom_buffer(new QByteArray) {
-  ui->setupUi(this);
 
+    ui->setupUi(this);
     this->setWindowTitle("Multi ESC Config Tool 0.1");
-    serialInfoStuff();
+    serialInfo();
     connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
     hide4wayButtons(true);
@@ -41,7 +41,7 @@ Widget::~Widget() {
 }
 
 
-void Widget::on_ButtonConnect_clicked() {
+void Widget::on_buttonConnect_clicked() {
   if (serial->isOpen()) {
     serialPortClose();
   } else {
@@ -49,14 +49,14 @@ void Widget::on_ButtonConnect_clicked() {
   }
 }
 
-void Widget::on_passthoughButton_clicked() {
+void Widget::on_buttonPassthough_clicked() {
   if (four_way->passthrough_started == false) {
     hide4wayButtons(false);
     QByteArray passthroughenable2;    // payload  empty here
     four_way->passthrough_started = true;
     parseMSPMessage = false;
     send_mspCommand(0xf5,passthroughenable2);
-    ui->passthoughButton->setText("Passthrough Stop");
+    ui->buttonPassthough->setText("passthrough stop");
   } else {
     hide4wayButtons(true);
     hideESCSettings(true);
@@ -64,7 +64,7 @@ void Widget::on_passthoughButton_clicked() {
     writeData(four_way->makeFourWayCommand(0x34,0x00));
     parseMSPMessage = true;
     four_way->passthrough_started = false;
-    ui->passthoughButton->setText("Passthrough Start");
+    ui->buttonPassthough->setText("passthrough start");
   }
 
 
@@ -80,8 +80,8 @@ void Widget::serialPortOpen() {
   serial->setFlowControl(serial->NoFlowControl);
 
   if (serial->open(QIODevice::ReadWrite)) {
-    ui->ButtonConnect->setText("close");
-    ui->ButtonConnect->setStyleSheet("background-color: rgb(255,0,0);");
+    ui->buttonConnect->setText("close");
+    ui->buttonConnect->setStyleSheet("background-color: rgb(255,0,0);");
     showStatusMessage(tr("connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
   } else {
     //QMessageBox::critical(this, tr("Error"), serial->errorString());
@@ -92,8 +92,8 @@ void Widget::serialPortOpen() {
 void Widget::serialPortClose() {
   if (serial->isOpen()) {
     serial->close();
-    ui->ButtonConnect->setText("open");
-    ui->ButtonConnect->setStyleSheet("background-color: rgb(0,255,0);");
+    ui->buttonConnect->setText("open");
+    ui->buttonConnect->setStyleSheet("background-color: rgb(0,255,0);");
     showStatusMessage(tr("disconnected"));
   }
 }
@@ -110,7 +110,7 @@ void Widget::showStatusMessage(const QString &message) {
   ui->label_2->setText(message);
 }
 
-void Widget::serialInfoStuff() {
+void Widget::serialInfo() {
     const auto infos = QSerialPortInfo::availablePorts();
     QString s;
 
@@ -171,37 +171,37 @@ void Widget::readData() {
             four_way->ESC_connected = false;
           }
           hideEEPROMSettings(true);
-          qInfo("BAD OR NO ACK FROM ESC");
-          ui->StatusLabel->setText("BAD OR NO ACK FROM IF");
-          four_way->ack_type = BAD_ACK;
+          qInfo("esc->ACK_KO");
+          ui->StatusLabel->setText("esc->ACK_KO");
+          four_way->ack_type = ACK_KO;
           // four_way->ack_required = false;
         }
       } else {
         qInfo("4WAY CRC ERROR");
-        ui->StatusLabel->setText("BAD OR NO ACK FROM ESC");
-        four_way->ack_type = CRC_ERROR;
+        ui->StatusLabel->setText("esc->ACK_KO");
+        four_way->ack_type = ACK_CRC;
       }
     } else {
        qInfo("no ack required");
     }
   }
-
+  /*
   if (parseMSPMessage) {
-    //        data[]         // 24
-    //        data[]         // 4d
-    //        data[]         // 3c
-    //        data[]         // length  one byte
-    //        data[]         // command one byte
-    //        data[]         // payload x length bytes
-    //        data[]         // crc
-    }
+    data[]         // 24
+    data[]         // 4d
+    data[]         // 3c
+    data[]         // length  one byte
+    data[]         // command one byte
+    data[]         // payload x length bytes
+    data[]         // crc
+  }*/
 }
 
 void Widget::writeData(const QByteArray &data) {
   serial->write(data);
 }
 
-void Widget::on_sendMessageButton_clicked() {
+void Widget::on_buttonSendMessage_clicked() {
   msg_console->setEnabled(true);
   const QByteArray data = ui->plainTextEdit->toPlainText().toLocal8Bit();
   writeData(data);
@@ -214,7 +214,7 @@ uint8_t Widget::mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int 
   return (checksum);
 }
 
-void Widget::on_pushButton_clicked() {
+void Widget::on_buttonSetIfARM_clicked() {
   four_way->ack_required = true;
   writeData(four_way->makeFourWayCommand(0x3f,0x04));
 }
@@ -485,11 +485,11 @@ void Widget::on_writeBinary_clicked() {
         }
       }
 
-      if (four_way->ack_type == BAD_ACK) {
+      if (four_way->ack_type == ACK_KO) {
         return;
       }
 
-      if (four_way->ack_type == CRC_ERROR) {
+      if (four_way->ack_type == ACK_CRC) {
         i--;// go back to beggining of page to erase in case data has been written.
         index = (index - 256 * j);
         break;
