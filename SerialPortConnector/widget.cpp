@@ -266,20 +266,22 @@ bool Widget::connectMotor(uint8_t motor) {
     four_way->ack_required = true;
     retries = 0;
 
-    writeData(four_way->makeFourWayCommand(0x37,motor));
-    serial->waitForBytesWritten(500);
-    while (serial->waitForReadyRead(500)) {
-      // noop
-    }
-    readData();
-    while (serial->waitForReadyRead(50)) {
-      // noop
-    }
+    while(four_way->ack_required) {
+      writeData(four_way->makeFourWayCommand(0x37,motor));
+      serial->waitForBytesWritten(500);
+      while (serial->waitForReadyRead(500)) {
+        // noop
+      }
+      readData();
+      while (serial->waitForReadyRead(50)) {
+        // noop
+      }
 
-    //retries++;
-    //if(retries>max_retries/2){        // after 8 tries to get an ack
-    //    return (false);
-    //}
+      retries++;
+      if(retries > max_retries/2){        // after 8 tries to get an ack
+          return (false);
+      }
+    }
 
     if (four_way->ESC_connected == false) {
       qInfo("esc->notConnected");
