@@ -24,24 +24,18 @@ class Widget : public QWidget {
     uint8_t mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len);
     void send_mspCommand(uint8_t cmd, QByteArray payload);
 
-    void on_buttonConnect_clicked();
-
-    void on_buttonPassthough_clicked();
-
-    void on_serialSelectorBox_currentTextChanged(const QString &arg1);
-
+    void on_serialSelector_currentTextChanged(const QString &arg1);
+    void on_serialConnect_clicked();
+    void on_serialPassthough_clicked();
 
     void on_loadBinary_clicked();
     void on_writeBinary_clicked();
-    void on_VerifyFlash_clicked();
+    void on_verifyBinary_clicked();
 
     void on_initMotor2_clicked();
     void on_initMotor1_clicked();
     void on_initMotor3_clicked();
     void on_initMotor4_clicked();
-
-
-
 
   private:
     bool parseMSPMessage = true;

@@ -42,7 +42,7 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QPushButton" name="buttonPassthough">
+      <widget class="QPushButton" name="serialPassthough">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -55,7 +55,7 @@
         <string>passthrough start</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="serialSelectorBox">
+      <widget class="QComboBox" name="serialSelector">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -76,7 +76,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="serialLabel">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -89,7 +89,7 @@
         <string>serial port info</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="buttonConnect">
+      <widget class="QPushButton" name="serialConnect">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -102,7 +102,7 @@
         <string>open</string>
        </property>
       </widget>
-      <widget class="QLabel" name="StatusLabel">
+      <widget class="QLabel" name="statusLabel">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -112,7 +112,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;status:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;status&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
       <widget class="QFrame" name="frameMotor">
@@ -211,7 +211,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QPushButton" name="VerifyFlash">
+       <widget class="QPushButton" name="verifyBinary">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -265,11 +265,11 @@
        </widget>
       </widget>
       <zorder>frameMotor</zorder>
-      <zorder>buttonPassthough</zorder>
-      <zorder>serialSelectorBox</zorder>
-      <zorder>label_2</zorder>
-      <zorder>buttonConnect</zorder>
-      <zorder>StatusLabel</zorder>
+      <zorder>serialPassthough</zorder>
+      <zorder>serialSelector</zorder>
+      <zorder>serialLabel</zorder>
+      <zorder>serialConnect</zorder>
+      <zorder>statusLabel</zorder>
       <zorder>frameUpload</zorder>
      </widget>
     </item>

@@ -31,7 +31,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     frameUploadHide(true);
 
     ui->writeBinary->setHidden(true);
-    ui->VerifyFlash->setHidden(true);
+    ui->verifyBinary->setHidden(true);
 }
 
 Widget::~Widget() {
@@ -39,7 +39,7 @@ Widget::~Widget() {
 }
 
 
-void Widget::on_buttonConnect_clicked() {
+void Widget::on_serialConnect_clicked() {
   if (serial->isOpen()) {
     serialPortClose();
   } else {
@@ -47,28 +47,23 @@ void Widget::on_buttonConnect_clicked() {
   }
 }
 
-void Widget::on_buttonPassthough_clicked() {
+void Widget::on_serialPassthough_clicked() {
   if (four_way->passthrough_started == false) {
-
-    QByteArray passthroughenable2;    // payload  empty here
+    QByteArray passthroughenable;    // payload  empty here
     four_way->passthrough_started = true;
     parseMSPMessage = false;
-    send_mspCommand(0xf5,passthroughenable2);
-    ui->buttonPassthough->setText("passthrough stop");
+    send_mspCommand(0xf5,passthroughenable);
+    ui->serialPassthough->setText("passthrough stop");
   } else {
-
     writeData(four_way->makeFourWayCommand(0x34,0x00));
     parseMSPMessage = true;
     four_way->passthrough_started = false;
-    ui->buttonPassthough->setText("passthrough start");
+    ui->serialPassthough->setText("passthrough start");
   }
-
-
-
 }
 
 void Widget::serialPortOpen() {
-  serial->setPortName(ui->serialSelectorBox->currentText());
+  serial->setPortName(ui->serialSelector->currentText());
   serial->setBaudRate(serial->Baud115200);
   serial->setDataBits(serial->Data8);
   serial->setParity(serial->NoParity);
@@ -76,8 +71,8 @@ void Widget::serialPortOpen() {
   serial->setFlowControl(serial->NoFlowControl);
 
   if (serial->open(QIODevice::ReadWrite)) {
-    ui->buttonConnect->setText("close");
-    ui->buttonConnect->setStyleSheet("background-color: rgb(255,0,0);");
+    ui->serialConnect->setText("close");
+    ui->serialConnect->setStyleSheet("background-color: rgb(255,0,0);");
     showStatusMessage(tr("connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
   } else {
     //QMessageBox::critical(this, tr("Error"), serial->errorString());
@@ -88,38 +83,29 @@ void Widget::serialPortOpen() {
 void Widget::serialPortClose() {
   if (serial->isOpen()) {
     serial->close();
-    ui->buttonConnect->setText("open");
-    ui->buttonConnect->setStyleSheet("background-color: rgb(0,255,0);");
+    ui->serialConnect->setText("open");
+    ui->serialConnect->setStyleSheet("background-color: rgb(0,255,0);");
     showStatusMessage(tr("disconnected"));
   }
 }
 
 void Widget::loadBinFile() {
-  filename = QFileDialog::getOpenFileName(this,
-  tr("open file"), "c:", tr("all files (*.*)"));
+  filename = QFileDialog::getOpenFileName(this, tr("open file"), "c:", tr("all files (*.*)"));
 
   ui->writeBinary->setHidden(false);
-  ui->VerifyFlash->setHidden(false);
+  ui->verifyBinary->setHidden(false);
 }
 
 void Widget::showStatusMessage(const QString &message) {
-  ui->label_2->setText(message);
+  ui->serialLabel->setText(message);
 }
 
 void Widget::serialInfo() {
     const auto infos = QSerialPortInfo::availablePorts();
     QString s;
 
-    for (const QSerialPortInfo &info : infos) {      // here we should add to drop down menu
-      ui->serialSelectorBox->addItem(info.portName());
-      //  serial->setPortName(info.portName());
-      s = s + QObject::tr("port: ") + info.portName() + "\n"
-            + QObject::tr("location: ") + info.systemLocation() + "\n"
-            + QObject::tr("description: ") + info.description() + "\n"
-            + QObject::tr("manufacturer: ") + info.manufacturer() + "\n"
-            + QObject::tr("serialNumber: ") + info.serialNumber() + "\n"
-            + QObject::tr("vendorIdentifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
-            + QObject::tr("productIdentifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n";
+    for (const QSerialPortInfo &info : infos) {
+      ui->serialSelector->addItem(info.portName());
     }
 
 }
@@ -138,7 +124,7 @@ void Widget::readData() {
         if (data[data.size() - 3] == (char) 0x00) {     // ACK OK!!
           four_way->ack_required = false;
           four_way->ack_type = ACK_OK;
-          ui->StatusLabel->setText("esc->ACK_OK");
+          ui->statusLabel->setText("esc->ACK_OK");
           if (data[1] == (char) 0x3a) {
             // if verifying flash
             input_buffer->clear();
@@ -149,7 +135,7 @@ void Widget::readData() {
           }
           if(data[1] == (char) 0x37){
             frameUploadHide(false);
-            ui->StatusLabel->setText("Connected");
+            ui->statusLabel->setText("esc->connected");
             four_way->ESC_connected = true;
           }
         } else {            // bad ack
@@ -159,13 +145,13 @@ void Widget::readData() {
           }
 
           qInfo("esc->ACK_KO");
-          ui->StatusLabel->setText("esc->ACK_KO");
+          ui->statusLabel->setText("esc->ACK_KO");
           four_way->ack_type = ACK_KO;
           // four_way->ack_required = false;
         }
       } else {
         qInfo("4WAY CRC ERROR");
-        ui->StatusLabel->setText("esc->ACK_KO");
+        ui->statusLabel->setText("esc->ACK_KO");
         four_way->ack_type = ACK_CRC;
       }
     } else {
@@ -197,7 +183,7 @@ uint8_t Widget::mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int 
 
 
 
-void Widget::on_serialSelectorBox_currentTextChanged(const QString &arg1) {
+void Widget::on_serialSelector_currentTextChanged(const QString &arg1) {
   // noop
 }
 
@@ -286,7 +272,7 @@ void Widget::on_writeBinary_clicked() {
   qInfo("what is going on? size :  %d ", sizeofBin );
 }
 
-void Widget::on_VerifyFlash_clicked() {
+void Widget::on_verifyBinary_clicked() {
     QFile inputFile(filename);
     inputFile.open(QIODevice::ReadOnly);
 
@@ -357,7 +343,7 @@ bool Widget::connectMotor(uint8_t motor) {
 
     if (four_way->ESC_connected == false) {
       qInfo("esc->notConnected");
-      ui->StatusLabel->setText("esc->notConnected");
+      ui->statusLabel->setText("esc->notConnected");
       return (false);
     }
 
@@ -378,10 +364,10 @@ bool Widget::connectMotor(uint8_t motor) {
     }
 
     if (input_buffer->at(0) == 0x01) {
-      ui->StatusLabel->setText("esc->connected EEPROM->OK");
+      ui->statusLabel->setText("esc->connected EEPROM->OK");
       return (true);
     } else {
-      ui->StatusLabel->setText("esc->connected EEPROM->KO");
+      ui->statusLabel->setText("esc->connected EEPROM->KO");
       return (false);
     }
 }
@@ -398,7 +384,7 @@ void Widget::on_initMotor1_clicked() {
   ui->initMotor1->setFlat(true);
 
   if (connectMotor(0x00)) {
-    //ui->StatusLabel->setText("M1:Connected: Settings read OK ");
+    //ui->statusLabel->setText("M1:Connected: Settings read OK ");
   }
 }
 
@@ -407,7 +393,7 @@ void Widget::on_initMotor2_clicked() {
   ui->initMotor2->setFlat(true);
 
   if (connectMotor(0x01)) {
-    //ui->StatusLabel->setText("M2:Connected: Settings read OK ");
+    //ui->statusLabel->setText("M2:Connected: Settings read OK ");
   }
 }
 
@@ -416,7 +402,7 @@ void Widget::on_initMotor3_clicked() {
   ui->initMotor3->setFlat(true);
 
   if (connectMotor(0x02)) {
-    //ui->StatusLabel->setText("M3:Connected: Settings read OK ");
+    //ui->statusLabel->setText("M3:Connected: Settings read OK ");
   }
 }
 
@@ -425,7 +411,7 @@ void Widget::on_initMotor4_clicked() {
   ui->initMotor4->setFlat(true);
 
   if(connectMotor(0x03)){
-    //ui->StatusLabel->setText("M4:Connected: Settings read OK ");
+    //ui->statusLabel->setText("M4:Connected: Settings read OK ");
     return;
   }
 }
