@@ -23,7 +23,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   eeprom_buffer(new QByteArray) {
 
     ui->setupUi(this);
-    this->setWindowTitle("Multi ESC Config Tool 0.1");
+    this->setWindowTitle("v 0.1");
     serialInfo();
     connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
@@ -31,7 +31,6 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     frameUploadHide(true);
 
     ui->writeBinary->setHidden(true);
-    ui->verifyBinary->setHidden(true);
 }
 
 Widget::~Widget() {
@@ -93,7 +92,6 @@ void Widget::loadBinFile() {
   filename = QFileDialog::getOpenFileName(this, tr("open file"), "c:", tr("all files (*.*)"));
 
   ui->writeBinary->setHidden(false);
-  ui->verifyBinary->setHidden(false);
 }
 
 void Widget::showStatusMessage(const QString &message) {
@@ -270,55 +268,6 @@ void Widget::on_writeBinary_clicked() {
     }
   }
   qInfo("what is going on? size :  %d ", sizeofBin );
-}
-
-void Widget::on_verifyBinary_clicked() {
-    QFile inputFile(filename);
-    inputFile.open(QIODevice::ReadOnly);
-
-    //  QTextStream in(&inputFile);
-    QByteArray line = inputFile.readAll();
-    inputFile.close();
-
-    uint16_t bin_size = line.size();
-    uint16_t K128Chunks = bin_size / 128;
-    uint32_t index = 0;
-    for (int i = 0; i < K128Chunks +1; i++) {
-      retries = 0;
-      four_way->ack_required = true;
-      while (four_way->ack_required) {
-        writeData(four_way->makeFourWayReadCommand(128,  4096+ (i*128)));
-        serial->waitForBytesWritten(500);
-        while (serial->waitForReadyRead(500)) {
-          // noop
-        }
-        readData();
-        retries++;
-        if (retries>max_retries) {        // after 8 tries to get an ack
-          return;
-        }
-      }
-
-      for (int j = 0; j < input_buffer->size(); j ++) {
-        if (input_buffer->at(j) == line.at(j + i * 128)) {
-          qInfo("the same! index : %d", index);
-          index++;
-          if(index>=bin_size){
-            qInfo("all memory verified in flash memory");
-            break;
-          }
-        } else {
-          qInfo("data error in flash memory");
-          return;
-        }
-      }
-
-      ui->progressBar->setValue((index*100)/bin_size);
-      QApplication::processEvents();
-    }
-
-    //  four_way->ack_required = true;
-    //  writeData(four_way->makeFourWayReadCommand(128,  4096 + i*128));
 }
 
 bool Widget::connectMotor(uint8_t motor) {

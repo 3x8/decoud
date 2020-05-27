@@ -30,7 +30,6 @@ class Widget : public QWidget {
 
     void on_loadBinary_clicked();
     void on_writeBinary_clicked();
-    void on_verifyBinary_clicked();
 
     void on_initMotor2_clicked();
     void on_initMotor1_clicked();
