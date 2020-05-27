@@ -67,14 +67,14 @@ class Widget : public QWidget {
     void showStatusMessage(const QString &message);
 
     typedef union __attribute__ ((packed)) {
-        uint8_t bytes[2];
-        uint16_t word;
+      uint8_t bytes[2];
+      uint16_t word;
     } uint8_16_u;
 
     enum messages{
-        ACK_OK,
-        ACK_KO,
-        ACK_CRC
+      ACK_OK,
+      ACK_KO,
+      ACK_CRC
     };
 
   private:
