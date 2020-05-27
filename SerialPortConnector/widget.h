@@ -26,7 +26,6 @@ class Widget : public QWidget {
 
     void on_serialSelector_currentTextChanged(const QString &arg1);
     void on_serialConnect_clicked();
-    void on_serialPassthough_clicked();
 
     void on_loadBinary_clicked();
     void on_writeBinary_clicked();

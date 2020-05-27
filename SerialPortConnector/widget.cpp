@@ -42,22 +42,13 @@ void Widget::on_serialConnect_clicked() {
   if (serial->isOpen()) {
     serialPortClose();
   } else {
+    QMessageBox::information(this, tr("information"), "remove esc power");
     serialPortOpen();
-  }
-}
-
-void Widget::on_serialPassthough_clicked() {
-  if (four_way->passthrough_started == false) {
-    QByteArray passthroughenable;    // payload  empty here
+    QByteArray passthroughenable;
     four_way->passthrough_started = true;
     parseMSPMessage = false;
     send_mspCommand(0xf5,passthroughenable);
-    ui->serialPassthough->setText("passthrough stop");
-  } else {
-    writeData(four_way->makeFourWayCommand(0x34,0x00));
-    parseMSPMessage = true;
-    four_way->passthrough_started = false;
-    ui->serialPassthough->setText("passthrough start");
+    QMessageBox::information(this, tr("information"), "connect esc power");
   }
 }
 

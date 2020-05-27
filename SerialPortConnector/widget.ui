@@ -42,19 +42,6 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QPushButton" name="serialPassthough">
-       <property name="geometry">
-        <rect>
-         <x>270</x>
-         <y>10</y>
-         <width>121</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>passthrough start</string>
-       </property>
-      </widget>
       <widget class="QComboBox" name="serialSelector">
        <property name="geometry">
         <rect>
@@ -252,7 +239,6 @@
        </widget>
       </widget>
       <zorder>frameMotor</zorder>
-      <zorder>serialPassthough</zorder>
       <zorder>serialSelector</zorder>
       <zorder>serialLabel</zorder>
       <zorder>serialConnect</zorder>
