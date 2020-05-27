@@ -398,7 +398,7 @@ void Widget::on_initMotor1_clicked() {
   ui->initMotor1->setFlat(true);
 
   if (connectMotor(0x00)) {
-    ui->StatusLabel->setText("M1:Connected: Settings read OK ");
+    //ui->StatusLabel->setText("M1:Connected: Settings read OK ");
   }
 }
 
@@ -407,7 +407,7 @@ void Widget::on_initMotor2_clicked() {
   ui->initMotor2->setFlat(true);
 
   if (connectMotor(0x01)) {
-    ui->StatusLabel->setText("M2:Connected: Settings read OK ");
+    //ui->StatusLabel->setText("M2:Connected: Settings read OK ");
   }
 }
 
@@ -416,7 +416,7 @@ void Widget::on_initMotor3_clicked() {
   ui->initMotor3->setFlat(true);
 
   if (connectMotor(0x02)) {
-    ui->StatusLabel->setText("M3:Connected: Settings read OK ");
+    //ui->StatusLabel->setText("M3:Connected: Settings read OK ");
   }
 }
 
@@ -425,10 +425,8 @@ void Widget::on_initMotor4_clicked() {
   ui->initMotor4->setFlat(true);
 
   if(connectMotor(0x03)){
-    ui->StatusLabel->setText("M4:Connected: Settings read OK ");
+    //ui->StatusLabel->setText("M4:Connected: Settings read OK ");
     return;
-  } else {
-     ui->StatusLabel->setText("M4:Did not connect");
   }
 }
 
