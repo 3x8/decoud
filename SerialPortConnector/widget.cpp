@@ -88,6 +88,7 @@ void Widget::serialPortClose() {
     frameMotorHide(false);
     frameUploadHide(true);
     ui->writeBinary->setHidden(true);
+    ui->statusLabel->setText("disconnected");
     motorAllBlack();
   }
 }
