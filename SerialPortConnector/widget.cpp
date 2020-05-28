@@ -290,7 +290,7 @@ bool Widget::motorConnect(uint8_t motor) {
       }
 
       retries++;
-      if (retries > 2) {
+      if (retries > 3) {
         return (false);
       }
     }
@@ -312,7 +312,7 @@ bool Widget::motorConnect(uint8_t motor) {
 
       readData();
       retries++;
-      if (retries > 2) {
+      if (retries > 3) {
         return (false);
       }
     }
