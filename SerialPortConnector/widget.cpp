@@ -116,7 +116,7 @@ void Widget::serialInfo() {
 void Widget::readData() {
   const QByteArray data = serial->readAll();
 
-  qInfo("data.size() = %d ", data.size());
+  qInfo("readData()->data.size() = %d ", data.size());
 
   if (fourWay->passthroughStarted) {
     if (fourWay->ackRequired == true) {
