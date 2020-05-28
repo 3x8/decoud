@@ -26,7 +26,7 @@ class Widget : public QWidget {
 
   private slots:
     uint8_t mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len);
-    void send_mspCommand(uint8_t command, QByteArray payload);
+    void mspCommandSend(uint8_t command, QByteArray payload);
 
     void on_serialSelector_currentTextChanged(const QString &arg1);
     void on_serialConnect_clicked();

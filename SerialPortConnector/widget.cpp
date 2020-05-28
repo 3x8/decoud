@@ -52,7 +52,7 @@ void Widget::on_serialConnect_clicked() {
     QByteArray passthroughenable;
     fourWay->passthroughStarted = true;
     parseMSPMessage = false;
-    send_mspCommand(0xf5,passthroughenable);
+    mspCommandSend(0xf5,passthroughenable);
     QMessageBox::information(this, tr("information"), "connect esc power");
   }
 }
@@ -188,7 +188,7 @@ void Widget::on_serialSelector_currentTextChanged(const QString &arg1) {
   // noop
 }
 
-void Widget::send_mspCommand(uint8_t command, QByteArray payload) {
+void Widget::mspCommandSend(uint8_t command, QByteArray payload) {
   QByteArray mspMsgOut;
   mspMsgOut.append((char) 0x24);
   mspMsgOut.append((char) 0x4d);
