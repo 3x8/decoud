@@ -36,9 +36,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
 
     frameMotorHide(false);
     frameUploadHide(true);
-
     ui->writeBinary->setHidden(true);
-
     motorAllBlack();
 }
 
@@ -85,6 +83,7 @@ void Widget::serialPortClose() {
     ui->serialConnect->setText("open");
     ui->serialConnect->setStyleSheet("background-color: rgb(0,255,0);");
     showStatusMessage(tr("disconnected"));
+    frameUploadHide(true);
   }
 }
 
