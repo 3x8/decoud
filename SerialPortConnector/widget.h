@@ -7,6 +7,8 @@
 
 #define __FW_VERSION__ "v0.0.1"
 
+#define RETRIES_MAX 3
+
 #if (!defined(UNUSED))
   #define UNUSED(x) (void)(x)
 #endif
@@ -42,8 +44,6 @@ class Widget : public QWidget {
   private:
     char version[256];
     bool parseMSPMessage = true;
-    uint8_t retriesIndex = 0;
-    uint8_t retriesMax = 16;
 
     Ui::Widget *ui;
     void loadBinFile();

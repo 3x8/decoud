@@ -127,13 +127,14 @@ void Widget::readData() {
           ui->statusLabel->setText("esc->ACK_OK");
 
           // if verifying flash
+          /*
           if (data[1] == (char) 0x3a) {
             bufferInput->clear();
             for(int i = 0; i < (uint8_t)data[4]; i ++){
               bufferInput->append(data[i+5]); // first 4 byte are package header
             }
             qInfo("esc->ACK_OK");
-          }
+          }*/
 
           if (data[1] == (char) 0x37) {
             fourWay->escConnected = true;
@@ -221,15 +222,14 @@ void Widget::on_writeBinary_clicked() {
   uint16_t index = 0;
   ui->progressBar->setValue(0);
   uint8_t pages = sizeofBin / 1024;
-  uint8_t retriesMax = 8;
   uint8_t retriesIndex = 0;
 
   for (int i = 0; i <= pages; i++){   // for each page ( including partial page at end)
     for  (int j = 0; j < 4; j++){      // 4 buffers per page
-      QByteArray twofiftysixitems;
+      QByteArray buffer256;
       // for debugging limit to 50
       for (int k = 0; k < 256; k++) {       // transfer 256 bytes each buffer
-        twofiftysixitems.append(line.at(k+ (i*1024) + (j*256)));
+        buffer256.append(line.at(k + (i*1024) + (j*256)));
         index++;
         if(index >= sizeofBin){
           break;
@@ -239,14 +239,14 @@ void Widget::on_writeBinary_clicked() {
       fourWay->ackRequired = true;
       retriesIndex = 0;
       while (fourWay->ackRequired) {
-        writeData(fourWay->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
+        writeData(fourWay->makeFourWayWriteCommand(buffer256, buffer256.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
         serial->waitForBytesWritten(1000);
         serial->waitForReadyRead(250);
         readData();
-        qInfo("(uint8_t)twofiftysixitems[0] = %d ", ((uint8_t)twofiftysixitems[0]));
+        //qInfo("(uint8_t)buffer256[0] = %d ", ((uint8_t)buffer256[0]));
 
         retriesIndex++;
-        if (retriesIndex > retriesMax) {        // after 8 tries to get an ack
+        if (retriesIndex > RETRIES_MAX) {
           break;
         }
       }
@@ -288,7 +288,7 @@ bool Widget::motorConnect(uint8_t motor) {
       }
 
       retriesIndex++;
-      if (retriesIndex > 3) {
+      if (retriesIndex > RETRIES_MAX) {
         return (false);
       }
     }
@@ -310,7 +310,7 @@ bool Widget::motorConnect(uint8_t motor) {
 
       readData();
       retriesIndex++;
-      if (retriesIndex > 3) {
+      if (retriesIndex > RETRIES_MAX) {
         return (false);
       }
     }
