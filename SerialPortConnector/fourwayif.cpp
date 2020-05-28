@@ -50,8 +50,8 @@ bool FourWayIF::checkCRC(const QByteArray data, uint16_t bufferSize){
   char fourWayCrcHighByte = (crc >> 8) & 0xff;;
   char fourWayCrcLowByte = crc & 0xff;
 
-  qInfo("fourWayCrc : %d%d",fourWayCrcHighByte ,fourWayCrcLowByte);
-  qInfo("receivedCrc: %d%d",data[bufferSize-2] ,data[bufferSize-1]);
+  qInfo("fourWayCrc : %x%x",fourWayCrcHighByte ,fourWayCrcLowByte);
+  qInfo("receivedCrc: %x%x",data[bufferSize-2] ,data[bufferSize-1]);
 
   if ((fourWayCrcHighByte == data[bufferSize-2]) && (fourWayCrcLowByte == data[bufferSize-1])) {
     return(true);
