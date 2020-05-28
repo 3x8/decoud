@@ -11,7 +11,6 @@ MAKEFILE      = Makefile
 EQ            = =
 
 ####### Compiler, tools and options
-
 REVISION      = $(shell git log -1 --format="%h")
 
 CC            = gcc
@@ -39,7 +38,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = SerialPortConnector1.0.0
-DISTDIR       = /home/max/Documents/git/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/.tmp/SerialPortConnector1.0.0
+DISTDIR = /home/max/Documents/git/conutheadUpload/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/.tmp/SerialPortConnector1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/opt/Qt/5.14.2/gcc_64/lib
 LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread
@@ -261,6 +260,7 @@ DIST          = /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_post.prf \
+		../SerialPortConnector/.qmake.stash \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -490,6 +490,7 @@ Makefile: ../SerialPortConnector/SerialPortConnector.pro /opt/Qt/5.14.2/gcc_64/m
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -704,6 +705,7 @@ Makefile: ../SerialPortConnector/SerialPortConnector.pro /opt/Qt/5.14.2/gcc_64/m
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/qt_config.prf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/toolchain.prf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -773,9 +775,7 @@ compiler_rcc_make_all: qrc_serialportconnector.cpp qrc_textfinder.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_serialportconnector.cpp qrc_textfinder.cpp
 qrc_serialportconnector.cpp: ../SerialPortConnector/serialportconnector.qrc \
-		/opt/Qt/5.14.2/gcc_64/bin/rcc \
-		../SerialPortConnector/flash_application_test.bin \
-		../SerialPortConnector/FullF051Bldc.bin
+		/opt/Qt/5.14.2/gcc_64/bin/rcc
 	/opt/Qt/5.14.2/gcc_64/bin/rcc -name serialportconnector ../SerialPortConnector/serialportconnector.qrc -o qrc_serialportconnector.cpp
 
 qrc_textfinder.cpp: ../SerialPortConnector/textfinder.qrc \
@@ -913,7 +913,7 @@ moc_outconsole.cpp: ../SerialPortConnector/outconsole.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtGui/qfontdatabase.h \
 		moc_predefs.h \
 		/opt/Qt/5.14.2/gcc_64/bin/moc
-	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/SerialPortConnector -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SerialPortConnector/outconsole.h -o moc_outconsole.cpp
+	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/conutheadUpload/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/conutheadUpload/SerialPortConnector -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SerialPortConnector/outconsole.h -o moc_outconsole.cpp
 
 moc_widget.cpp: ../SerialPortConnector/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
@@ -1043,7 +1043,7 @@ moc_widget.cpp: ../SerialPortConnector/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		moc_predefs.h \
 		/opt/Qt/5.14.2/gcc_64/bin/moc
-	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/SerialPortConnector -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SerialPortConnector/widget.h -o moc_widget.cpp
+	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/conutheadUpload/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/conutheadUpload/SerialPortConnector -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SerialPortConnector/widget.h -o moc_widget.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1566,6 +1566,25 @@ widget.o: ../SerialPortConnector/widget.cpp ../SerialPortConnector/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		ui_widget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/QVariant \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QProgressBar \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qprogressbar.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
 		../SerialPortConnector/outconsole.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QPlainTextEdit \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qplaintextedit.h \
