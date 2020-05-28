@@ -21,7 +21,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   bufferEeprom(new QByteArray) {
 
     ui->setupUi(this);
-    sprintf(version,"costaguana v0.0.1 (%s)",__REVISION__);
+    sprintf(version,"decoud v0.0.1 (%s)",__REVISION__);
     this->setWindowTitle(version);
 
     QFont font("Arial");
