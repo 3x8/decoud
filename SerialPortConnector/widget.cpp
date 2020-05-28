@@ -27,7 +27,6 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     sprintf(version,"costaguana v0.0.1 (%s)",__REVISION__);
     this->setWindowTitle(version);
 
-
     QFont font("Arial");
     font.setStyleHint(QFont::Monospace);
     font.setPointSize(8);
@@ -98,7 +97,11 @@ void Widget::serialPortClose() {
 void Widget::loadBinFile() {
   filename = QFileDialog::getOpenFileName(this, tr("open file"), "c:", tr("all files (*.*)"));
 
-  ui->writeBinary->setHidden(false);
+  if(filename.size() > 3) {
+    ui->writeBinary->setHidden(false);
+  } else {
+    ui->writeBinary->setHidden(true);
+  }
 }
 
 void Widget::showStatusMessage(const QString &message) {
@@ -119,7 +122,7 @@ void Widget::readData() {
   const QByteArray data = serial->readAll();
 
   qInfo("data.size() = %d ", data.size());
-  QByteArray data_hex_string = data.toHex();
+  //QByteArray data_hex_string = data.toHex();
 
   if (four_way->passthroughStarted) {
     if (four_way->ackRequired == true) {
@@ -218,7 +221,7 @@ void Widget::on_writeBinary_clicked() {
   QFile inputFile(filename);
   inputFile.open(QIODevice::ReadOnly);
   QByteArray line = inputFile.readAll();
-  QByteArray data_hex_string = line.toHex();
+  //QByteArray data_hex_string = line.toHex();
 
   inputFile.close();
 
