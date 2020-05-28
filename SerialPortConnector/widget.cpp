@@ -341,7 +341,7 @@ void Widget::on_initMotor1_clicked() {
   motorAllBlack();
   if (motorConnect(0x00)) {
     //ui->initMotor1->setFont(this->font());
-    ui->initMotor1->setStyleSheet("color: red;");
+    ui->initMotor1->setStyleSheet("color: green;");
   } else {
     ui->initMotor1->setStyleSheet("color: white;");
   }
@@ -350,7 +350,7 @@ void Widget::on_initMotor1_clicked() {
 void Widget::on_initMotor2_clicked() {
   motorAllBlack();
   if (motorConnect(0x01)) {
-    ui->initMotor2->setStyleSheet("color: red;");
+    ui->initMotor2->setStyleSheet("color: green;");
   } else {
     ui->initMotor2->setStyleSheet("color: white;");
   }
@@ -359,7 +359,7 @@ void Widget::on_initMotor2_clicked() {
 void Widget::on_initMotor3_clicked() {
   motorAllBlack();
   if (motorConnect(0x02)) {
-    ui->initMotor3->setStyleSheet("color: red;");
+    ui->initMotor3->setStyleSheet("color: green;");
   } else {
     ui->initMotor3->setStyleSheet("color: white;");
   }
@@ -368,7 +368,7 @@ void Widget::on_initMotor3_clicked() {
 void Widget::on_initMotor4_clicked() {
   motorAllBlack();
   if(motorConnect(0x03)){
-    ui->initMotor4->setStyleSheet("color: red;");
+    ui->initMotor4->setStyleSheet("color: green;");
   } else {
     ui->initMotor4->setStyleSheet("color: white;");
   }
