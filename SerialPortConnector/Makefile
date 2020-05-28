@@ -57,17 +57,13 @@ SOURCES       = ../SerialPortConnector/fourwayif.cpp \
 		../SerialPortConnector/main.cpp \
 		../SerialPortConnector/mspif.cpp \
 		../SerialPortConnector/outconsole.cpp \
-		../SerialPortConnector/widget.cpp qrc_serialportconnector.cpp \
-		qrc_textfinder.cpp \
-		moc_outconsole.cpp \
+		../SerialPortConnector/widget.cpp moc_outconsole.cpp \
 		moc_widget.cpp
 OBJECTS       = fourwayif.o \
 		main.o \
 		mspif.o \
 		outconsole.o \
 		widget.o \
-		qrc_serialportconnector.o \
-		qrc_textfinder.o \
 		moc_outconsole.o \
 		moc_widget.o
 DIST          = /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -511,9 +507,7 @@ Makefile: ../SerialPortConnector/SerialPortConnector.pro /opt/Qt/5.14.2/gcc_64/m
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/features/lex.prf \
-		../SerialPortConnector/SerialPortConnector.pro \
-		../SerialPortConnector/serialportconnector.qrc \
-		../SerialPortConnector/textfinder.qrc
+		../SerialPortConnector/SerialPortConnector.pro
 	$(QMAKE) -o Makefile ../SerialPortConnector/SerialPortConnector.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/common/unix.conf:
@@ -727,8 +721,6 @@ Makefile: ../SerialPortConnector/SerialPortConnector.pro /opt/Qt/5.14.2/gcc_64/m
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/yacc.prf:
 /opt/Qt/5.14.2/gcc_64/mkspecs/features/lex.prf:
 ../SerialPortConnector/SerialPortConnector.pro:
-../SerialPortConnector/serialportconnector.qrc:
-../SerialPortConnector/textfinder.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../SerialPortConnector/SerialPortConnector.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 
@@ -743,7 +735,6 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../SerialPortConnector/serialportconnector.qrc ../SerialPortConnector/textfinder.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../SerialPortConnector/fourwayif.h ../SerialPortConnector/mspif.h ../SerialPortConnector/outconsole.h ../SerialPortConnector/widget.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../SerialPortConnector/fourwayif.cpp ../SerialPortConnector/main.cpp ../SerialPortConnector/mspif.cpp ../SerialPortConnector/outconsole.cpp ../SerialPortConnector/widget.cpp $(DISTDIR)/
@@ -771,18 +762,8 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all: qrc_serialportconnector.cpp qrc_textfinder.cpp
+compiler_rcc_make_all:
 compiler_rcc_clean:
-	-$(DEL_FILE) qrc_serialportconnector.cpp qrc_textfinder.cpp
-qrc_serialportconnector.cpp: ../SerialPortConnector/serialportconnector.qrc \
-		/opt/Qt/5.14.2/gcc_64/bin/rcc
-	/opt/Qt/5.14.2/gcc_64/bin/rcc -name serialportconnector ../SerialPortConnector/serialportconnector.qrc -o qrc_serialportconnector.cpp
-
-qrc_textfinder.cpp: ../SerialPortConnector/textfinder.qrc \
-		/opt/Qt/5.14.2/gcc_64/bin/rcc \
-		../SerialPortConnector/input.txt
-	/opt/Qt/5.14.2/gcc_64/bin/rcc -name textfinder ../SerialPortConnector/textfinder.qrc -o qrc_textfinder.cpp
-
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -1062,7 +1043,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
@@ -1619,12 +1600,6 @@ widget.o: ../SerialPortConnector/widget.cpp ../SerialPortConnector/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../SerialPortConnector/widget.cpp
-
-qrc_serialportconnector.o: qrc_serialportconnector.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_serialportconnector.o qrc_serialportconnector.cpp
-
-qrc_textfinder.o: qrc_textfinder.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_textfinder.o qrc_textfinder.cpp
 
 moc_outconsole.o: moc_outconsole.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_outconsole.o moc_outconsole.cpp
