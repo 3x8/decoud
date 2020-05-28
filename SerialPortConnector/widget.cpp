@@ -34,6 +34,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     serialInfo();
     connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
+    ui->serialConnect->setStyleSheet("background-color: red;");
     frameMotorHide(false);
     frameUploadHide(true);
     ui->writeBinary->setHidden(true);
