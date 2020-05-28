@@ -20,8 +20,8 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   four_way(new FourWayIF),
   msg_console(new OutConsole),
   serial(new QSerialPort(this)),
-  input_buffer(new QByteArray),
-  eeprom_buffer(new QByteArray) {
+  bufferInput(new QByteArray),
+  bufferEeprom(new QByteArray) {
 
     ui->setupUi(this);
     sprintf(version,"costaguana v0.0.1 (%s)",__REVISION__);
@@ -74,7 +74,6 @@ void Widget::serialPortOpen() {
     ui->serialConnect->setStyleSheet("background-color: green;");
     showStatusMessage(tr("connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
   } else {
-    //QMessageBox::critical(this, tr("Error"), serial->errorString());
     showStatusMessage(tr("open error"));
   }
 }
@@ -122,7 +121,6 @@ void Widget::readData() {
   const QByteArray data = serial->readAll();
 
   qInfo("data.size() = %d ", data.size());
-  //QByteArray data_hex_string = data.toHex();
 
   if (four_way->passthroughStarted) {
     if (four_way->ackRequired == true) {
@@ -134,9 +132,9 @@ void Widget::readData() {
 
           // if verifying flash
           if (data[1] == (char) 0x3a) {
-            input_buffer->clear();
+            bufferInput->clear();
             for(int i = 0; i < (uint8_t)data[4]; i ++){
-              input_buffer->append(data[i+5]); // first 4 byte are package header
+              bufferInput->append(data[i+5]); // first 4 byte are package header
             }
             qInfo("esc->ACK_OK");
           }
@@ -194,13 +192,13 @@ void Widget::on_serialSelector_currentTextChanged(const QString &arg1) {
   // noop
 }
 
-void Widget::send_mspCommand(uint8_t cmd, QByteArray payload) {
+void Widget::send_mspCommand(uint8_t command, QByteArray payload) {
   QByteArray mspMsgOut;
   mspMsgOut.append((char) 0x24);
   mspMsgOut.append((char) 0x4d);
   mspMsgOut.append((char) 0x3c);
   mspMsgOut.append((char) payload.length());
-  mspMsgOut.append((char) cmd);
+  mspMsgOut.append((char) command);
   if(payload.length() > 0){
     mspMsgOut.append(payload);
   }
@@ -221,8 +219,6 @@ void Widget::on_writeBinary_clicked() {
   QFile inputFile(filename);
   inputFile.open(QIODevice::ReadOnly);
   QByteArray line = inputFile.readAll();
-  //QByteArray data_hex_string = line.toHex();
-
   inputFile.close();
 
   uint32_t sizeofBin = line.size();
@@ -327,7 +323,7 @@ bool Widget::motorConnect(uint8_t motor) {
     return (true);
 
     /*
-    if (input_buffer->at(0) == 0x01) {
+    if (bufferInput->at(0) == 0x01) {
       // EEPROM->OK
     } else {
       // EEPROM->KO

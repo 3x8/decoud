@@ -9,7 +9,7 @@ FourWayIF::FourWayIF() {
   escConnected = false;
 }
 
-QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray sendbuffer, int bufferSize, uint16_t address ) {
+QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray bufferSend, int bufferSize, uint16_t address ) {
   QByteArray fourWayWriteMsgOut;
 
   if (bufferSize == 256){
@@ -21,7 +21,7 @@ QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray sendbuffer, int b
   fourWayWriteMsgOut.append((char) (address >> 8) & 0xff);  // address high byte
   fourWayWriteMsgOut.append((char) address & 0xff); // address low byte
   fourWayWriteMsgOut.append((char) bufferSize); // message length
-  fourWayWriteMsgOut.append(sendbuffer);
+  fourWayWriteMsgOut.append(bufferSend);
 
   uint16_t writeCrc  = makeCRC(fourWayWriteMsgOut);
   uint8_t fourWayCrcHighByte = (writeCrc >> 8) & 0xff;;
@@ -99,15 +99,15 @@ uint16_t FourWayIF::makeCRC(const QByteArray data){
   return (crc);
 }
 
-QByteArray FourWayIF::makeFourWayCommand(uint8_t cmd, uint8_t device_num){
+QByteArray FourWayIF::makeFourWayCommand(uint8_t command, uint8_t deviceNumber){
   QByteArray fourWayMsgOut;
 
   fourWayMsgOut.append((char) 0x2f);  // escape character PC
-  fourWayMsgOut.append((char) cmd);   // 4 way command
+  fourWayMsgOut.append((char) command);   // 4 way command
   fourWayMsgOut.append((char) 0x00);  // address 0 for single command
   fourWayMsgOut.append((char) 0x00);  //  adress
   fourWayMsgOut.append((char) 0x01);  // payload size
-  fourWayMsgOut.append((char) device_num);  // payload  ESC device number
+  fourWayMsgOut.append((char) deviceNumber);  // payload  ESC device number
 
   uint16_t msgCRC = makeCRC(fourWayMsgOut);
   char fourWayCrcHighByte = (msgCRC >> 8) & 0xff;;

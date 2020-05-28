@@ -11,9 +11,9 @@ class FourWayIF {
     bool escConnected;
 
     FourWayIF();
-    QByteArray makeFourWayWriteCommand(const QByteArray sendbuffer, int buffer_size, uint16_t address);
-    QByteArray makeFourWayReadCommand( int buffer_size, uint16_t address );
-    QByteArray makeFourWayCommand(uint8_t cmd, uint8_t device_num);
+    QByteArray makeFourWayWriteCommand(const QByteArray bufferSend, int bufferSize, uint16_t address);
+    QByteArray makeFourWayReadCommand( int bufferSize, uint16_t address );
+    QByteArray makeFourWayCommand(uint8_t command, uint8_t deviceNumber);
     uint16_t makeCRC(const QByteArray data);
 
   private:
