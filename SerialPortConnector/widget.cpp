@@ -118,7 +118,7 @@ void Widget::serialInfo() {
 void Widget::readData() {
   const QByteArray data = serial->readAll();
 
-  qInfo("size of data : %d ", data.size());
+  qInfo("data.size() = %d ", data.size());
   QByteArray data_hex_string = data.toHex();
 
   if (four_way->passthroughStarted) {
@@ -154,12 +154,12 @@ void Widget::readData() {
           qInfo("esc->ACK_KO");
         }
       } else {
-        qInfo("4WAY CRC ERROR");
-        ui->statusLabel->setText("esc->ACK_KO");
         four_way->ackType = ACK_CRC;
+        ui->statusLabel->setText("esc->ACK_CRC");
+        qInfo("esc->ACK_CRC");
       }
     } else {
-       qInfo("no ack required");
+       qInfo("four_way->ackRequired = false");
     }
   }
 
@@ -248,7 +248,7 @@ void Widget::on_writeBinary_clicked() {
         serial->waitForBytesWritten(1000);
         serial->waitForReadyRead(250);
         readData();
-        qInfo("what is going on? size :  %d ", ((uint8_t)twofiftysixitems[0]));
+        qInfo("(uint8_t)twofiftysixitems[0] = %d ", ((uint8_t)twofiftysixitems[0]));
 
         retriesIndex++;
         if (retriesIndex > retriesMax) {        // after 8 tries to get an ack
@@ -273,7 +273,7 @@ void Widget::on_writeBinary_clicked() {
       }
     }
   }
-  qInfo("what is going on? size :  %d ", sizeofBin );
+  qInfo("sizeofBin = %d ", sizeofBin );
 }
 
 bool Widget::motorConnect(uint8_t motor) {
