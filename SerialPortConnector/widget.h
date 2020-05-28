@@ -47,7 +47,7 @@ class Widget : public QWidget {
     void frameUploadHide(bool b);
     void frameMotorHide(bool b);
 
-    void allup();
+    void allMotorsBlack();
     bool connectMotor(uint8_t motor);
     void sendFirstEeprom();
     void serialPortClose();
