@@ -18,14 +18,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     fourwayif.cpp \
     main.cpp \
-    mspif.cpp \
-    outconsole.cpp \
     widget.cpp
 
 HEADERS += \
     fourwayif.h \
-    mspif.h \
-    outconsole.h \
     widget.h
 
 FORMS += \
@@ -36,6 +32,6 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RESOURCES += 
+RESOURCES +=
 
 DISTFILES +=

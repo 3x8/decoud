@@ -1,8 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
-#include "outconsole.h"
 #include "fourwayif.h"
-#include "mspif.h"
 
 #include <QFile>
 #include <QTextStream>
