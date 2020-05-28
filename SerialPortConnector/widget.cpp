@@ -30,7 +30,6 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     QApplication::setFont(font);
 
     serialInfo();
-    connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
     ui->serialConnect->setStyleSheet("background-color: red;");
     frameMotorHide(false);
