@@ -11,7 +11,6 @@
   #define UNUSED(x) (void)(x)
 #endif
 
-class OutConsole;
 class FourWayIF;
 
 QT_BEGIN_NAMESPACE
@@ -75,8 +74,7 @@ class Widget : public QWidget {
     };
 
   private:
-    FourWayIF *four_way = nullptr;
-    OutConsole *msg_console = nullptr;
+    FourWayIF *fourWay = nullptr;
     QSerialPort *serial = nullptr;
     QLabel *statuslabel = nullptr;
     QByteArray *bufferInput = nullptr;

@@ -15,8 +15,7 @@
 
 Widget::Widget(QWidget *parent): QWidget(parent),
   ui(new Ui::Widget),
-  four_way(new FourWayIF),
-  msg_console(new OutConsole),
+  fourWay(new FourWayIF),
   serial(new QSerialPort(this)),
   bufferInput(new QByteArray),
   bufferEeprom(new QByteArray) {
@@ -52,7 +51,7 @@ void Widget::on_serialConnect_clicked() {
     QMessageBox::information(this, tr("information"), "remove esc power");
     serialPortOpen();
     QByteArray passthroughenable;
-    four_way->passthroughStarted = true;
+    fourWay->passthroughStarted = true;
     parseMSPMessage = false;
     send_mspCommand(0xf5,passthroughenable);
     QMessageBox::information(this, tr("information"), "connect esc power");
@@ -120,12 +119,12 @@ void Widget::readData() {
 
   qInfo("data.size() = %d ", data.size());
 
-  if (four_way->passthroughStarted) {
-    if (four_way->ackRequired == true) {
-      if (four_way->checkCRC(data,data.size())) {
+  if (fourWay->passthroughStarted) {
+    if (fourWay->ackRequired == true) {
+      if (fourWay->checkCRC(data,data.size())) {
         if (data[data.size() - 3] == (char) 0x00) {     // ACK OK!!
-          four_way->ackRequired = false;
-          four_way->ackType = ACK_OK;
+          fourWay->ackRequired = false;
+          fourWay->ackType = ACK_OK;
           ui->statusLabel->setText("esc->ACK_OK");
 
           // if verifying flash
@@ -138,27 +137,27 @@ void Widget::readData() {
           }
 
           if (data[1] == (char) 0x37) {
-            four_way->escConnected = true;
+            fourWay->escConnected = true;
             ui->statusLabel->setText("esc->connected");
             frameUploadHide(false);
           }
         } else {
           // bad ack
           if (data[1] == (char) 0x37) {
-            four_way->escConnected = false;
+            fourWay->escConnected = false;
             frameUploadHide(true);
           }
-          four_way->ackType = ACK_KO;
+          fourWay->ackType = ACK_KO;
           ui->statusLabel->setText("esc->ACK_KO");
           qInfo("esc->ACK_KO");
         }
       } else {
-        four_way->ackType = ACK_CRC;
+        fourWay->ackType = ACK_CRC;
         ui->statusLabel->setText("esc->ACK_CRC");
         qInfo("esc->ACK_CRC");
       }
     } else {
-       qInfo("four_way->ackRequired = false");
+       qInfo("fourWay->ackRequired = false");
     }
   }
 
@@ -238,10 +237,10 @@ void Widget::on_writeBinary_clicked() {
         }
       }
 
-      four_way->ackRequired = true;
+      fourWay->ackRequired = true;
       retriesIndex = 0;
-      while (four_way->ackRequired) {
-        writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
+      while (fourWay->ackRequired) {
+        writeData(fourWay->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
         serial->waitForBytesWritten(1000);
         serial->waitForReadyRead(250);
         readData();
@@ -253,11 +252,11 @@ void Widget::on_writeBinary_clicked() {
         }
       }
 
-      if (four_way->ackType == ACK_KO) {
+      if (fourWay->ackType == ACK_KO) {
         return;
       }
 
-      if (four_way->ackType == ACK_CRC) {
+      if (fourWay->ackType == ACK_CRC) {
         i--;// go back to beggining of page to erase in case data has been written.
         index = (index - 256 * j);
         break;
@@ -275,11 +274,11 @@ void Widget::on_writeBinary_clicked() {
 
 bool Widget::motorConnect(uint8_t motor) {
     uint16_t buffer_length = 48;
-    four_way->ackRequired = true;
+    fourWay->ackRequired = true;
     uint8_t retriesIndex = 0;
 
-    while(four_way->ackRequired) {
-      writeData(four_way->makeFourWayCommand(0x37,motor));
+    while(fourWay->ackRequired) {
+      writeData(fourWay->makeFourWayCommand(0x37,motor));
       serial->waitForBytesWritten(500);
       while (serial->waitForReadyRead(500)) {
         // noop
@@ -295,16 +294,16 @@ bool Widget::motorConnect(uint8_t motor) {
       }
     }
 
-    if (four_way->escConnected == false) {
+    if (fourWay->escConnected == false) {
       qInfo("esc->notConnected");
       ui->statusLabel->setText("esc->notConnected");
       return (false);
     }
 
-    four_way->ackRequired = true;
+    fourWay->ackRequired = true;
 
-    while (four_way->ackRequired) {
-      writeData(four_way->makeFourWayReadCommand(buffer_length,0x7c00));
+    while (fourWay->ackRequired) {
+      writeData(fourWay->makeFourWayReadCommand(buffer_length,0x7c00));
       serial->waitForBytesWritten(500);
       while (serial->waitForReadyRead(500)) {
         // noop
