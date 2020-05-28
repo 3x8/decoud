@@ -14,6 +14,7 @@
 #include <QTimer>
 #include <QFileDialog>
 
+
 Widget::Widget(QWidget *parent): QWidget(parent),
   ui(new Ui::Widget),
   four_way(new FourWayIF),
@@ -23,7 +24,8 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   eeprom_buffer(new QByteArray) {
 
     ui->setupUi(this);
-    this->setWindowTitle(__REVISION__);
+    sprintf(version,"costaguana v0.0.1 (%s)",__REVISION__);
+    this->setWindowTitle(version);
 
 
     QFont font("Arial");
@@ -224,8 +226,8 @@ void Widget::on_writeBinary_clicked() {
   uint16_t index = 0;
   ui->progressBar->setValue(0);
   uint8_t pages = sizeofBin / 1024;
-  uint8_t max_retries = 8;
-  uint8_t retries = 0;
+  uint8_t retriesMax = 8;
+  uint8_t retriesIndex = 0;
 
   for (int i = 0; i <= pages; i++){   // for each page ( including partial page at end)
     for  (int j = 0; j < 4; j++){      // 4 buffers per page
@@ -240,7 +242,7 @@ void Widget::on_writeBinary_clicked() {
       }
 
       four_way->ackRequired = true;
-      retries = 0;
+      retriesIndex = 0;
       while (four_way->ackRequired) {
         writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
         serial->waitForBytesWritten(1000);
@@ -248,8 +250,8 @@ void Widget::on_writeBinary_clicked() {
         readData();
         qInfo("what is going on? size :  %d ", ((uint8_t)twofiftysixitems[0]));
 
-        retries++;
-        if (retries > max_retries) {        // after 8 tries to get an ack
+        retriesIndex++;
+        if (retriesIndex > retriesMax) {        // after 8 tries to get an ack
           break;
         }
       }
@@ -277,7 +279,7 @@ void Widget::on_writeBinary_clicked() {
 bool Widget::motorConnect(uint8_t motor) {
     uint16_t buffer_length = 48;
     four_way->ackRequired = true;
-    uint8_t retries = 0;
+    uint8_t retriesIndex = 0;
 
     while(four_way->ackRequired) {
       writeData(four_way->makeFourWayCommand(0x37,motor));
@@ -290,8 +292,8 @@ bool Widget::motorConnect(uint8_t motor) {
         // noop
       }
 
-      retries++;
-      if (retries > 3) {
+      retriesIndex++;
+      if (retriesIndex > 3) {
         return (false);
       }
     }
@@ -312,8 +314,8 @@ bool Widget::motorConnect(uint8_t motor) {
       }
 
       readData();
-      retries++;
-      if (retries > 3) {
+      retriesIndex++;
+      if (retriesIndex > 3) {
         return (false);
       }
     }
