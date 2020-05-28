@@ -127,7 +127,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>use</string>
+         <string>motor</string>
         </property>
        </widget>
        <widget class="QPushButton" name="initMotor1">
@@ -140,7 +140,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>M1</string>
+         <string>m1</string>
         </property>
        </widget>
        <widget class="QPushButton" name="initMotor2">
@@ -153,7 +153,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>M2</string>
+         <string>m2</string>
         </property>
        </widget>
        <widget class="QPushButton" name="initMotor3">
@@ -166,7 +166,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>M3</string>
+         <string>m3</string>
         </property>
        </widget>
        <widget class="QPushButton" name="initMotor4">
@@ -179,7 +179,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>M4</string>
+         <string>m4</string>
         </property>
        </widget>
       </widget>

@@ -12,11 +12,13 @@ EQ            = =
 
 ####### Compiler, tools and options
 
+REVISION      = $(shell git log -1 --format="%h")
+
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES) -D'__REVISION__="$(REVISION)"'
 INCPATH       = -I../SerialPortConnector -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -37,12 +39,12 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = SerialPortConnector1.0.0
-DISTDIR = /home/max/Documents/git/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/.tmp/SerialPortConnector1.0.0
+DISTDIR       = /home/max/Documents/git/build-SerialPortConnector-Desktop_Qt_5_14_2_GCC_64bit-Debug/.tmp/SerialPortConnector1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/opt/Qt/5.14.2/gcc_64/lib
-LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread
 AR            = ar cqs
-RANLIB        = 
+RANLIB        =
 SED           = sed
 STRIP         = strip
 
@@ -288,14 +290,14 @@ DIST          = /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../SerialPortConnector/outconsole.cpp \
 		../SerialPortConnector/widget.cpp
 QMAKE_TARGET  = SerialPortConnector
-DESTDIR       = 
+DESTDIR       =
 TARGET        = SerialPortConnector
 
 
 first: all
 ####### Build rules
 
-SerialPortConnector: ui_widget.h $(OBJECTS)  
+SerialPortConnector: ui_widget.h $(OBJECTS)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../SerialPortConnector/SerialPortConnector.pro /opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -746,13 +748,13 @@ distdir: FORCE
 	$(COPY_FILE) --parents ../SerialPortConnector/widget.ui $(DISTDIR)/
 
 
-clean: compiler_clean 
+clean: compiler_clean
 	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
 
-distclean: clean 
-	-$(DEL_FILE) $(TARGET) 
+distclean: clean
+	-$(DEL_FILE) $(TARGET)
 	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
@@ -1060,7 +1062,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
@@ -1599,16 +1601,16 @@ widget.o: ../SerialPortConnector/widget.cpp ../SerialPortConnector/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../SerialPortConnector/widget.cpp
 
-qrc_serialportconnector.o: qrc_serialportconnector.cpp 
+qrc_serialportconnector.o: qrc_serialportconnector.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_serialportconnector.o qrc_serialportconnector.cpp
 
-qrc_textfinder.o: qrc_textfinder.cpp 
+qrc_textfinder.o: qrc_textfinder.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_textfinder.o qrc_textfinder.cpp
 
-moc_outconsole.o: moc_outconsole.cpp 
+moc_outconsole.o: moc_outconsole.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_outconsole.o moc_outconsole.cpp
 
-moc_widget.o: moc_widget.cpp 
+moc_widget.o: moc_widget.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_widget.o moc_widget.cpp
 
 ####### Install
@@ -1619,7 +1621,7 @@ install_target: first FORCE
 
 uninstall_target: FORCE
 	-$(DEL_FILE) $(INSTALL_ROOT)/opt/SerialPortConnector/bin/$(QMAKE_TARGET)
-	-$(DEL_DIR) $(INSTALL_ROOT)/opt/SerialPortConnector/bin/ 
+	-$(DEL_DIR) $(INSTALL_ROOT)/opt/SerialPortConnector/bin/
 
 
 install: install_target  FORCE
@@ -1627,4 +1629,3 @@ install: install_target  FORCE
 uninstall: uninstall_target  FORCE
 
 FORCE:
-

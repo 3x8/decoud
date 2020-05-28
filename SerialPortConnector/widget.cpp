@@ -23,7 +23,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
   eeprom_buffer(new QByteArray) {
 
     ui->setupUi(this);
-    this->setWindowTitle("v 0.1");
+    this->setWindowTitle(__REVISION__);
     serialInfo();
     connect(msg_console, &OutConsole::getData, this, &Widget::writeData);
 
