@@ -39,7 +39,7 @@ Widget::Widget(QWidget *parent): QWidget(parent),
 
     ui->writeBinary->setHidden(true);
 
-    allMotorsBlack();
+    motorAllBlack();
 }
 
 Widget::~Widget() {
@@ -54,7 +54,7 @@ void Widget::on_serialConnect_clicked() {
     QMessageBox::information(this, tr("information"), "remove esc power");
     serialPortOpen();
     QByteArray passthroughenable;
-    four_way->passthrough_started = true;
+    four_way->passthroughStarted = true;
     parseMSPMessage = false;
     send_mspCommand(0xf5,passthroughenable);
     QMessageBox::information(this, tr("information"), "connect esc power");
@@ -114,12 +114,12 @@ void Widget::readData() {
   qInfo("size of data : %d ", data.size());
   QByteArray data_hex_string = data.toHex();
 
-  if (four_way->passthrough_started) {
-    if (four_way->ack_required == true) {
+  if (four_way->passthroughStarted) {
+    if (four_way->ackRequired == true) {
       if (four_way->checkCRC(data,data.size())) {
         if (data[data.size() - 3] == (char) 0x00) {     // ACK OK!!
-          four_way->ack_required = false;
-          four_way->ack_type = ACK_OK;
+          four_way->ackRequired = false;
+          four_way->ackType = ACK_OK;
           ui->statusLabel->setText("esc->ACK_OK");
 
           // if verifying flash
@@ -132,24 +132,24 @@ void Widget::readData() {
           }
 
           if (data[1] == (char) 0x37) {
-            four_way->ESC_connected = true;
+            four_way->escConnected = true;
             ui->statusLabel->setText("esc->connected");
             frameUploadHide(false);
           }
         } else {
           // bad ack
           if (data[1] == (char) 0x37) {
-            four_way->ESC_connected = false;
+            four_way->escConnected = false;
             frameUploadHide(true);
           }
-          four_way->ack_type = ACK_KO;
+          four_way->ackType = ACK_KO;
           ui->statusLabel->setText("esc->ACK_KO");
           qInfo("esc->ACK_KO");
         }
       } else {
         qInfo("4WAY CRC ERROR");
         ui->statusLabel->setText("esc->ACK_KO");
-        four_way->ack_type = ACK_CRC;
+        four_way->ackType = ACK_CRC;
       }
     } else {
        qInfo("no ack required");
@@ -180,6 +180,7 @@ uint8_t Widget::mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int 
 }
 
 void Widget::on_serialSelector_currentTextChanged(const QString &arg1) {
+  UNUSED(arg1);
   // noop
 }
 
@@ -233,9 +234,9 @@ void Widget::on_writeBinary_clicked() {
         }
       }
 
-      four_way->ack_required = true;
+      four_way->ackRequired = true;
       retries = 0;
-      while (four_way->ack_required) {
+      while (four_way->ackRequired) {
         writeData(four_way->makeFourWayWriteCommand(twofiftysixitems, twofiftysixitems.size(), 8192 + (i*1024) + (j*256))) ;     // increment address every i and j
         serial->waitForBytesWritten(1000);
         serial->waitForReadyRead(250);
@@ -248,11 +249,11 @@ void Widget::on_writeBinary_clicked() {
         }
       }
 
-      if (four_way->ack_type == ACK_KO) {
+      if (four_way->ackType == ACK_KO) {
         return;
       }
 
-      if (four_way->ack_type == ACK_CRC) {
+      if (four_way->ackType == ACK_CRC) {
         i--;// go back to beggining of page to erase in case data has been written.
         index = (index - 256 * j);
         break;
@@ -268,12 +269,12 @@ void Widget::on_writeBinary_clicked() {
   qInfo("what is going on? size :  %d ", sizeofBin );
 }
 
-bool Widget::connectMotor(uint8_t motor) {
+bool Widget::motorConnect(uint8_t motor) {
     uint16_t buffer_length = 48;
-    four_way->ack_required = true;
+    four_way->ackRequired = true;
     uint8_t retries = 0;
 
-    while(four_way->ack_required) {
+    while(four_way->ackRequired) {
       writeData(four_way->makeFourWayCommand(0x37,motor));
       serial->waitForBytesWritten(500);
       while (serial->waitForReadyRead(500)) {
@@ -290,15 +291,15 @@ bool Widget::connectMotor(uint8_t motor) {
       }
     }
 
-    if (four_way->ESC_connected == false) {
+    if (four_way->escConnected == false) {
       qInfo("esc->notConnected");
       ui->statusLabel->setText("esc->notConnected");
       return (false);
     }
 
-    four_way->ack_required = true;
+    four_way->ackRequired = true;
 
-    while (four_way->ack_required) {
+    while (four_way->ackRequired) {
       writeData(four_way->makeFourWayReadCommand(buffer_length,0x7c00));
       serial->waitForBytesWritten(500);
       while (serial->waitForReadyRead(500)) {
@@ -323,16 +324,18 @@ bool Widget::connectMotor(uint8_t motor) {
     }*/
 }
 
-void Widget::allMotorsBlack() {
+void Widget::motorAllBlack() {
   ui->initMotor1->setStyleSheet("color: black;");
   ui->initMotor2->setStyleSheet("color: black;");
   ui->initMotor3->setStyleSheet("color: black;");
   ui->initMotor4->setStyleSheet("color: black;");
+
+  ui->progressBar->setValue(0);
 }
 
 void Widget::on_initMotor1_clicked() {
-  allMotorsBlack();
-  if (connectMotor(0x00)) {
+  motorAllBlack();
+  if (motorConnect(0x00)) {
     //ui->initMotor1->setFont(this->font());
     ui->initMotor1->setStyleSheet("color: red;");
   } else {
@@ -341,8 +344,8 @@ void Widget::on_initMotor1_clicked() {
 }
 
 void Widget::on_initMotor2_clicked() {
-  allMotorsBlack();
-  if (connectMotor(0x01)) {
+  motorAllBlack();
+  if (motorConnect(0x01)) {
     ui->initMotor2->setStyleSheet("color: red;");
   } else {
     ui->initMotor2->setStyleSheet("color: white;");
@@ -350,8 +353,8 @@ void Widget::on_initMotor2_clicked() {
 }
 
 void Widget::on_initMotor3_clicked() {
-  allMotorsBlack();
-  if (connectMotor(0x02)) {
+  motorAllBlack();
+  if (motorConnect(0x02)) {
     ui->initMotor3->setStyleSheet("color: red;");
   } else {
     ui->initMotor3->setStyleSheet("color: white;");
@@ -359,8 +362,8 @@ void Widget::on_initMotor3_clicked() {
 }
 
 void Widget::on_initMotor4_clicked() {
-  allMotorsBlack();
-  if(connectMotor(0x03)){
+  motorAllBlack();
+  if(motorConnect(0x03)){
     ui->initMotor4->setStyleSheet("color: red;");
   } else {
     ui->initMotor4->setStyleSheet("color: white;");

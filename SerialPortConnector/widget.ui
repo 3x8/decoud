@@ -117,7 +117,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="connectMotor">
+       <widget class="QLabel" name="motorConnect">
         <property name="geometry">
          <rect>
           <x>10</x>

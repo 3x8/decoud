@@ -5,13 +5,10 @@
 class FourWayIF {
   public:
     bool checkCRC(const QByteArray data , uint16_t buffer_length);
-    bool ACK_required();
-    void set_Ack_req(char ackreq);
-    bool ack_required;
-    bool ack_received;
-    uint8_t ack_type;
-    bool passthrough_started;
-    bool ESC_connected;
+    bool ackRequired;
+    uint8_t ackType;
+    bool passthroughStarted;
+    bool escConnected;
 
     FourWayIF();
     QByteArray makeFourWayWriteCommand(const QByteArray sendbuffer, int buffer_size, uint16_t address);
@@ -20,7 +17,5 @@ class FourWayIF {
     uint16_t makeCRC(const QByteArray data);
 
   private:
-    int testVar;
-    char ack_req;
 
 };

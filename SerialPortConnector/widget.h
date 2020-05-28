@@ -5,6 +5,10 @@
 #include <QLabel>
 #include <QComboBox>
 
+#if (!defined(UNUSED))
+  #define UNUSED(x) (void)(x)
+#endif
+
 class OutConsole;
 class FourWayIF;
 
@@ -20,7 +24,6 @@ class Widget : public QWidget {
     ~Widget();
 
   private slots:
-
     uint8_t mspSerialChecksumBuf(uint8_t checksum, const uint8_t *data, int len);
     void send_mspCommand(uint8_t cmd, QByteArray payload);
 
@@ -44,16 +47,16 @@ class Widget : public QWidget {
     void loadBinFile();
     void serialInfo();
     void serialPortOpen();
+    void serialPortClose();
+
     void frameUploadHide(bool b);
     void frameMotorHide(bool b);
 
-    void allMotorsBlack();
-    bool connectMotor(uint8_t motor);
-    void sendFirstEeprom();
-    void serialPortClose();
+    bool motorConnect(uint8_t motor);
+    void motorAllBlack();
+
     void readData();
     void putData(const QByteArray &data);
-    void verifyFlash();
     void writeData(const QByteArray &data);
     void showStatusMessage(const QString &message);
 

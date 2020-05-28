@@ -3,16 +3,11 @@
 #include <QMessageBox>
 
 FourWayIF::FourWayIF() {
-  testVar = 12345;
-  ack_req = 1;
-  ack_required = true;
-  ack_received = false;
-  passthrough_started = false;
-  ack_type = 1;
-  ESC_connected = false;
+  ackRequired = true;
+  ackType = 1;
+  passthroughStarted = false;
+  escConnected = false;
 }
-
-
 
 QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray sendbuffer, int bufferSize, uint16_t address ) {
   QByteArray fourWayWriteMsgOut;
@@ -36,7 +31,6 @@ QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray sendbuffer, int b
 
   return(fourWayWriteMsgOut);
 }
-
 
 bool FourWayIF::checkCRC(const QByteArray data, uint16_t bufferSize){
   uint16_t crc  = 0;
@@ -65,8 +59,6 @@ bool FourWayIF::checkCRC(const QByteArray data, uint16_t bufferSize){
     return(false);
   }
 }
-
-
 
 QByteArray FourWayIF::makeFourWayReadCommand(int bufferSize, uint16_t address ) {
   if (bufferSize == 256) {
@@ -107,7 +99,6 @@ uint16_t FourWayIF::makeCRC(const QByteArray data){
   return (crc);
 }
 
-
 QByteArray FourWayIF::makeFourWayCommand(uint8_t cmd, uint8_t device_num){
   QByteArray fourWayMsgOut;
 
@@ -125,12 +116,4 @@ QByteArray FourWayIF::makeFourWayCommand(uint8_t cmd, uint8_t device_num){
   fourWayMsgOut.append((char) fourWayCrcLowByte);
 
   return(fourWayMsgOut);
-}
-
-bool FourWayIF::ACK_required(){
-  return(ack_required);
-}
-
-void FourWayIF::set_Ack_req(char ackreq){
-  ack_req = ackreq;
 }
