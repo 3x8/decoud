@@ -125,6 +125,7 @@ void Widget::readData() {
           fourWay->ackRequired = false;
           fourWay->ackType = ACK_OK;
           ui->statusLabel->setText("esc->ACK_OK");
+          qInfo("esc->ACK_KO");
 
           // if verifying flash
           /*
