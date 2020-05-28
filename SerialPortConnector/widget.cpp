@@ -69,7 +69,7 @@ void Widget::serialPortOpen() {
 
   if (serial->open(QIODevice::ReadWrite)) {
     ui->serialConnect->setText("close");
-    ui->serialConnect->setStyleSheet("background-color: rgb(255,0,0);");
+    ui->serialConnect->setStyleSheet("background-color: green;");
     showStatusMessage(tr("connected to %1 : %2, %3, %4, %5, %6").arg(serial->portName()).arg(serial->dataBits()).arg(serial->baudRate()).arg(serial->parity()).arg(serial->stopBits()).arg(serial->flowControl()));
   } else {
     //QMessageBox::critical(this, tr("Error"), serial->errorString());
@@ -81,9 +81,9 @@ void Widget::serialPortClose() {
   if (serial->isOpen()) {
     serial->close();
     ui->serialConnect->setText("open");
-    ui->serialConnect->setStyleSheet("background-color: rgb(0,255,0);");
+    ui->serialConnect->setStyleSheet("background-color: red;");
     showStatusMessage(tr("disconnected"));
-    
+
     frameMotorHide(false);
     frameUploadHide(true);
     ui->writeBinary->setHidden(true);
