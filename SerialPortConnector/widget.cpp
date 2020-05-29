@@ -225,8 +225,8 @@ void Widget::on_writeBinary_clicked() {
   uint8_t pages = sizeofBin / 1024;
   uint8_t retriesIndex = 0;
 
-  for (int i = 0; i <= pages; i++){   // for each page ( including partial page at end)
-    for  (int j = 0; j < 4; j++){      // 4 buffers per page
+  for (int i = 0; i <= pages; i++) {   // for each page ( including partial page at end)
+    for  (int j = 0; j < 4; j++) {      // 4 buffers per page
       QByteArray buffer256;
       // for debugging limit to 50
       for (int k = 0; k < 256; k++) {       // transfer 256 bytes each buffer
@@ -264,7 +264,7 @@ void Widget::on_writeBinary_clicked() {
 
       ui->progressBar->setValue((index*100) / sizeofBin);
       QApplication::processEvents();
-      if(index >= sizeofBin){
+      if(index >= sizeofBin) {
         break;
       }
     }
@@ -366,7 +366,7 @@ void Widget::on_initMotor3_clicked() {
 
 void Widget::on_initMotor4_clicked() {
   motorAllBlack();
-  if(motorConnect(0x03)){
+  if (motorConnect(0x03)) {
     ui->initMotor4->setStyleSheet("color: green;");
   } else {
     ui->initMotor4->setStyleSheet("color: white;");
