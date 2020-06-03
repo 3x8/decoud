@@ -1,4 +1,4 @@
-# costaguana
+# decoud
 ![quad](icon.png)
 
 ***nostromo firmware uploader(GPLv3.0)***
