@@ -55,4 +55,4 @@ dkms.conf
 build-*
 .qmake.stash
 ui_widget.h
-
+SerialPortConnector
