@@ -41,4 +41,4 @@ MOC_DIR = ./build
 UI_DIR = ./build
 
 #REVISION      = $(shell git log -1 --format="%h")
-#QMAKE_CXXFLAGS += -D/'__REVISION__="$(REVISION)"/'
+#QMAKE_CXXFLAGS += -D'__REVISION__="$(REVISION)"'
