@@ -18,7 +18,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES) -D'__REVISION__="$(REVISION)"'
-INCPATH       = -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -Iobj -isystem /usr/include/libdrm -I. -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -Isrc -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -Ibuild -isystem /usr/include/libdrm -Ibuild -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -1284,6 +1284,25 @@ build/widget.o: src/widget.cpp src/widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		build/ui_widget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/QVariant \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QProgressBar \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qprogressbar.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
 		src/fourwayif.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
