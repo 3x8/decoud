@@ -11,7 +11,7 @@ MAKEFILE      = Makefile
 EQ            = =
 
 ####### Compiler, tools and options
-REVISION      = $(shell git log -1 --format="%h")
+-REVISION      = $(shell git log -1 --format="%h")
 
 CC            = gcc
 CXX           = g++
@@ -755,7 +755,7 @@ compiler_moc_predefs_make_all: obj/moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) obj/moc_predefs.h
 obj/moc_predefs.h: /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe __REVISION__=$(REVISION) -O2 -std=gnu++11 -Wall -Wextra -dM -E -o obj/moc_predefs.h /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe -O2 -std=gnu++11 -Wall -Wextra -dM -E -o obj/moc_predefs.h /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: obj/moc_widget.cpp
 compiler_moc_header_clean:
@@ -1284,6 +1284,25 @@ obj/widget.o: widget.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		ui_widget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/QVariant \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QProgressBar \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qprogressbar.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
 		fourwayif.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
