@@ -56,4 +56,4 @@ build-*
 .qmake.stash
 ui_widget.h
 decoud
-decoud
+moc_*
