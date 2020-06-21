@@ -18,7 +18,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES) -D'__REVISION__="$(REVISION)"'
-INCPATH       = -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -Iobj -isystem /usr/include/libdrm -I. -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = decoud1.0.0
-DISTDIR = /home/max/Documents/git/3x8/decoud/src/.tmp/decoud1.0.0
+DISTDIR = /home/max/Documents/git/3x8/decoud/src/obj/decoud1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/opt/Qt/5.14.2/gcc_64/lib
 LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread
@@ -49,17 +49,17 @@ STRIP         = strip
 
 ####### Output directory
 
-OBJECTS_DIR   = ./
+OBJECTS_DIR   = obj/
 
 ####### Files
 
 SOURCES       = fourwayif.cpp \
 		main.cpp \
-		widget.cpp moc_widget.cpp
-OBJECTS       = fourwayif.o \
-		main.o \
-		widget.o \
-		moc_widget.o
+		widget.cpp obj/moc_widget.cpp
+OBJECTS       = obj/fourwayif.o \
+		obj/main.o \
+		obj/widget.o \
+		obj/moc_widget.o
 DIST          = /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/common/unix.conf \
 		/opt/Qt/5.14.2/gcc_64/mkspecs/common/linux.conf \
@@ -751,16 +751,16 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_predefs_make_all: moc_predefs.h
+compiler_moc_predefs_make_all: obj/moc_predefs.h
 compiler_moc_predefs_clean:
-	-$(DEL_FILE) moc_predefs.h
-moc_predefs.h: /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe -O2 -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
+	-$(DEL_FILE) obj/moc_predefs.h
+obj/moc_predefs.h: /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe __REVISION__=$(REVISION) -O2 -std=gnu++11 -Wall -Wextra -dM -E -o obj/moc_predefs.h /opt/Qt/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_widget.cpp
+compiler_moc_header_make_all: obj/moc_widget.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_widget.cpp
-moc_widget.cpp: widget.h \
+	-$(DEL_FILE) obj/moc_widget.cpp
+obj/moc_widget.cpp: widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -886,9 +886,9 @@ moc_widget.cpp: widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
-		moc_predefs.h \
+		obj/moc_predefs.h \
 		/opt/Qt/5.14.2/gcc_64/bin/moc
-	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/3x8/decoud/src/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/3x8/decoud/src -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include widget.h -o moc_widget.cpp
+	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/3x8/decoud/src/obj/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/3x8/decoud/src -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include widget.h -o obj/moc_widget.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -911,7 +911,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-fourwayif.o: fourwayif.cpp fourwayif.h \
+obj/fourwayif.o: fourwayif.cpp fourwayif.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1018,9 +1018,9 @@ fourwayif.o: fourwayif.cpp fourwayif.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtGui/qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fourwayif.o fourwayif.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/fourwayif.o fourwayif.cpp
 
-main.o: main.cpp widget.h \
+obj/main.o: main.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1155,9 +1155,9 @@ main.o: main.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QStyleFactory \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qstylefactory.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o main.cpp
 
-widget.o: widget.cpp widget.h \
+obj/widget.o: widget.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1284,25 +1284,6 @@ widget.o: widget.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		ui_widget.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtCore/QVariant \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QApplication \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QFrame \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QProgressBar \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qprogressbar.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QPushButton \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qpushbutton.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
 		fourwayif.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
@@ -1320,10 +1301,10 @@ widget.o: widget.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtWidgets/qfiledialog.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o widget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/widget.o widget.cpp
 
-moc_widget.o: moc_widget.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_widget.o moc_widget.cpp
+obj/moc_widget.o: obj/moc_widget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/moc_widget.o obj/moc_widget.cpp
 
 ####### Install
 
