@@ -36,8 +36,9 @@ RESOURCES +=
 
 DISTFILES +=
 
-OBJECTS_DIR = ./obj
-MOC_DIR = ./obj
+OBJECTS_DIR = ./build
+MOC_DIR = ./build
+UI_DIR = ./build
 
 #REVISION      = $(shell git log -1 --format="%h")
 #QMAKE_CXXFLAGS += -D/'__REVISION__="$(REVISION)"/'

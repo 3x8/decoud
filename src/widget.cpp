@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "ui_widget.h"
+#include "build/ui_widget.h"
 #include "fourwayif.h"
 
 #include <QFile>
