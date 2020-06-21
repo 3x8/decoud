@@ -35,3 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES +=
 
 DISTFILES +=
+
+OBJECTS_DIR = ./obj

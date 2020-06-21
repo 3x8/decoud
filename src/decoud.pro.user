@@ -306,7 +306,7 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">decoud2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">decoud</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">decoud.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">decoud.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
