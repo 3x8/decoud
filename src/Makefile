@@ -11,13 +11,12 @@ MAKEFILE      = Makefile
 EQ            = =
 
 ####### Compiler, tools and options
-REVISION      = $(shell git log -1 --format="%h")
 
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES) -D'__REVISION__="$(REVISION)"'
+CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -37,13 +36,13 @@ DEL_DIR       = rmdir
 MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
-DISTNAME      = decoud_v0.0.1
-DISTDIR = /home/max/Documents/git/3x8/decoud/decoud/.tmp/decoud_v0.0.1
+DISTNAME      = decoud1.0.0
+DISTDIR = /home/max/Documents/git/3x8/decoud/src/.tmp/decoud1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/opt/Qt/5.14.2/gcc_64/lib
-LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread
+LIBS          = $(SUBLIBS) /opt/Qt/5.14.2/gcc_64/lib/libQt5Widgets.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Gui.so /opt/Qt/5.14.2/gcc_64/lib/libQt5SerialPort.so /opt/Qt/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
-RANLIB        =
+RANLIB        = 
 SED           = sed
 STRIP         = strip
 
@@ -275,14 +274,14 @@ DIST          = /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		main.cpp \
 		widget.cpp
 QMAKE_TARGET  = decoud
-DESTDIR       =
+DESTDIR       = 
 TARGET        = decoud
 
 
 first: all
 ####### Build rules
 
-decoud: ui_widget.h $(OBJECTS)
+decoud: ui_widget.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: decoud.pro /opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf /opt/Qt/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -728,13 +727,13 @@ distdir: FORCE
 	$(COPY_FILE) --parents widget.ui $(DISTDIR)/
 
 
-clean: compiler_clean
+clean: compiler_clean 
 	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
 
-distclean: clean
-	-$(DEL_FILE) $(TARGET)
+distclean: clean 
+	-$(DEL_FILE) $(TARGET) 
 	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
@@ -888,7 +887,7 @@ moc_widget.cpp: widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		moc_predefs.h \
 		/opt/Qt/5.14.2/gcc_64/bin/moc
-	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/3x8/decoud/decoud/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/3x8/decoud/decoud -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include widget.h -o moc_widget.cpp
+	/opt/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/max/Documents/git/3x8/decoud/src/moc_predefs.h -I/opt/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/max/Documents/git/3x8/decoud/src -I/opt/Qt/5.14.2/gcc_64/include -I/opt/Qt/5.14.2/gcc_64/include/QtWidgets -I/opt/Qt/5.14.2/gcc_64/include/QtGui -I/opt/Qt/5.14.2/gcc_64/include/QtSerialPort -I/opt/Qt/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include widget.h -o moc_widget.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -907,7 +906,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1322,7 +1321,7 @@ widget.o: widget.cpp widget.h \
 		/opt/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o widget.cpp
 
-moc_widget.o: moc_widget.cpp
+moc_widget.o: moc_widget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_widget.o moc_widget.cpp
 
 ####### Install
@@ -1334,7 +1333,7 @@ install_target: first FORCE
 
 uninstall_target: FORCE
 	-$(DEL_FILE) $(INSTALL_ROOT)/opt/decoud/bin/$(QMAKE_TARGET)
-	-$(DEL_DIR) $(INSTALL_ROOT)/opt/decoud/bin/
+	-$(DEL_DIR) $(INSTALL_ROOT)/opt/decoud/bin/ 
 
 
 install: install_target  FORCE
@@ -1342,3 +1341,4 @@ install: install_target  FORCE
 uninstall: uninstall_target  FORCE
 
 FORCE:
+
