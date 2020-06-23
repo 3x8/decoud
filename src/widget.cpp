@@ -24,10 +24,10 @@ Widget::Widget(QWidget *parent): QWidget(parent),
     sprintf(version,"decoud v0.0.1 (%s)",__REVISION__);
     this->setWindowTitle(version);
 
-    //QFont font("Arial");
-    //font.setStyleHint(QFont::Monospace);
-    //font.setPointSize(8);
-    //QApplication::setFont(font);
+    QFont font("Arial");
+    font.setStyleHint(QFont::Monospace);
+    font.setPointSize(8);
+    QApplication::setFont(font);
 
     serialInfo();
 
