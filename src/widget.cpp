@@ -225,6 +225,22 @@ void Widget::on_writeBinary_clicked() {
   uint8_t pages = sizeofBin / 1024;
   uint8_t retriesIndex = 0;
 
+
+  fourWay->ackRequired = true;
+  retriesIndex = 0;
+  while (fourWay->ackRequired) {
+    //writeData(fourWay->makeFourWayEraseAllCommand());
+    writeData(fourWay->makeFourWayErasePageCommand(8));
+    serial->waitForBytesWritten(1000);
+    serial->waitForReadyRead(250);
+    readData();
+
+    retriesIndex++;
+    if (retriesIndex > RETRIES_MAX) {
+      break;
+    }
+  }
+
   for (int i = 0; i <= pages; i++) {   // for each page ( including partial page at end)
     for  (int j = 0; j < 4; j++) {      // 4 buffers per page
       QByteArray buffer256;

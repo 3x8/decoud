@@ -32,6 +32,46 @@ QByteArray FourWayIF::makeFourWayWriteCommand(const QByteArray bufferSend, int b
   return(fourWayWriteMsgOut);
 }
 
+QByteArray FourWayIF::makeFourWayEraseAllCommand() {
+  QByteArray fourWayWriteMsgOut;
+
+  fourWayWriteMsgOut.append((char) 0x2f);
+  fourWayWriteMsgOut.append((char) 0x38);
+  fourWayWriteMsgOut.append((char) 0x00);
+  fourWayWriteMsgOut.append((char) 0x00);
+  fourWayWriteMsgOut.append((char) 0x01);
+  fourWayWriteMsgOut.append((char) 0x00);
+  fourWayWriteMsgOut.append((char) 0xCD);
+  fourWayWriteMsgOut.append((char) 0xF9);
+
+  /*
+  uint16_t writeCrc  = makeCRC(fourWayWriteMsgOut);
+  uint8_t fourWayCrcHighByte = (writeCrc >> 8) & 0xff;;
+  uint8_t fourWayCrcLowByte = writeCrc & 0xff;
+  fourWayWriteMsgOut.append((char) fourWayCrcHighByte);
+  fourWayWriteMsgOut.append((char) fourWayCrcLowByte);*/
+
+  return(fourWayWriteMsgOut);
+}
+
+QByteArray FourWayIF::makeFourWayErasePageCommand(uint8_t page) {
+  QByteArray fourWayWriteMsgOut;
+
+  fourWayWriteMsgOut.append((char) 0x2f);
+  fourWayWriteMsgOut.append((char) 0x39);
+  fourWayWriteMsgOut.append((char) 0x00);
+  fourWayWriteMsgOut.append((char) 0x00);
+  fourWayWriteMsgOut.append((char) 0x01);
+  fourWayWriteMsgOut.append((char) page);
+  uint16_t writeCrc  = makeCRC(fourWayWriteMsgOut);
+  uint8_t fourWayCrcHighByte = (writeCrc >> 8) & 0xff;;
+  uint8_t fourWayCrcLowByte = writeCrc & 0xff;
+  fourWayWriteMsgOut.append((char) fourWayCrcHighByte);
+  fourWayWriteMsgOut.append((char) fourWayCrcLowByte);
+
+  return(fourWayWriteMsgOut);
+}
+
 QByteArray FourWayIF::makeFourWayReadCommand(int bufferSize, uint16_t address ) {
   if (bufferSize == 256) {
     bufferSize = 0;
